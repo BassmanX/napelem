@@ -1,0 +1,55 @@
+.header {
+  background-color: #578FCA;
+  padding: 10px 0;
+  text-align: center;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  z-index: 3;
+}
+
+.header p {
+  color: white;
+  font-size: 50px;
+  padding: 0px;
+  margin: 0 0 0 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navLink { /* Módosítva: stílusosztály használata */
+  margin: 0 10px;
+  text-decoration: none;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .header {
+	position: fixed;
+	max-height: 100px;
+	padding-top: 0px;
+  }
+  .container {
+	font-size: 8px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .container p {
+	font-size: 24px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  #navbar {
+    margin-top: 10px;
+	max-height: 10px;
+  }
+}

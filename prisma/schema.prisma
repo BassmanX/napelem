@@ -1,0 +1,96 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  password String @db.Text
+  role     Role
+}
+
+model Project {
+  id            Int      @id @default(autoincrement())
+  customerName  String
+  location      String
+  description   String
+  estimatedTime Int?
+  workFee       Decimal?
+  status        Status
+  projectComponents ProjectComponent[]
+  projectLogs     ProjectLog[]
+}
+
+model Component {
+  id                   Int                @id @default(autoincrement())
+  name                 String
+  price                Decimal
+  maxQuantityPerRack Int
+  inventoryItems     InventoryItem[]
+  projectComponents  ProjectComponent[]
+}
+
+model Rack {
+  id            Int             @id @default(autoincrement())
+  row           Int
+  column        Int
+  level         Int
+  maxCapacity   Int
+  inventoryItems InventoryItem[]
+}
+
+model InventoryItem {
+  component   Component @relation(fields: [componentId], references: [id])
+  componentId Int
+  rack        Rack      @relation(fields: [rackId], references: [id])
+  rackId      Int
+  quantity    Int
+
+  @@id([componentId, rackId])
+}
+
+model ProjectComponent {
+  project     Project   @relation(fields: [projectId], references: [id])
+  projectId   Int
+  component   Component @relation(fields: [componentId], references: [id])
+  componentId Int
+  quantity    Int
+  reserved    Boolean
+
+  @@id([projectId, componentId])
+}
+
+model ProjectLog {
+  id        Int      @id @default(autoincrement())
+  project   Project  @relation(fields: [projectId], references: [id])
+  projectId Int
+  status    Status
+  timestamp DateTime @default(now())
+}
+
+enum Role {
+  szakember
+  raktarvezeto
+  raktaros
+}
+
+enum Status {
+  new
+  draft
+  wait
+  scheduled
+  inprogress
+  completed
+  failed
+}

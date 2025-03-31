@@ -1,0 +1,30 @@
+.footer {
+  background-color: #3674B5;
+  padding: 20px 0;
+  text-align: center;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  color: white;
+  z-index: 3;
+}
+
+.footer p {
+  margin: 10px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px; /* Hozzáadtuk a padding-et, hogy mobil nézetben is legyen hely */
+}
+
+@media (max-width: 1068px) {
+  .footer {
+    padding: 0 0px; /* Kisebb padding mobil nézetben */
+	font-size: 10px;
+  }
+  .footer p {
+  margin: 3px;
+}
+}
