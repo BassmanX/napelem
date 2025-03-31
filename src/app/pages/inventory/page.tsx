@@ -4,7 +4,7 @@ import Inventory from '@/app/components/Inventory';
 
 const InventoryPage: React.FC = () => {
   return (
-    <Layout role="raktárvezető">
+    <Layout>
       <Inventory />
     </Layout>
   );
