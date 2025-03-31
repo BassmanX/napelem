@@ -1,3 +1,25 @@
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.content {
+  display: flex;
+  flex: 1;
+}
+
+main {
+  flex: 1;
+  padding: 20px;
+}
+
+/*
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -9,6 +31,7 @@
     --foreground: #ededed;
   }
 }
+
 
 html,
 body {
@@ -40,3 +63,4 @@ a {
     color-scheme: dark;
   }
 }
+*/
