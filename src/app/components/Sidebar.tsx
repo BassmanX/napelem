@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 
 interface SidebarProps {
-  role: 'szakember' | 'raktáros' | 'raktárvezető';
+  role?: 'szakember' | 'raktáros' | 'raktárvezető';
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ role }) => {
