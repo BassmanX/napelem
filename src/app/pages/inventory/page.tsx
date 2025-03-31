@@ -1,6 +1,6 @@
 import React from 'react';
-import Layout from '../../../components/Layout';
-import Inventory from '../../../components/Inventory';
+import Layout from './src/app/components/Layout';
+import Inventory from './src/app/components/Inventory';
 
 const InventoryPage: React.FC = () => {
   return (
