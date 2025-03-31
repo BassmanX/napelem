@@ -1,7 +1,7 @@
 'use client';
-import 'globals.css';
-import Footer from '@/src/app/components/footer';
-import Header from '@/src/app/components/header';
+import './globals.css';
+import Footer from '@/app/components/footer';
+import Header from '@/app/components/header';
 import { SessionProvider } from 'next-auth/react';
 
 
