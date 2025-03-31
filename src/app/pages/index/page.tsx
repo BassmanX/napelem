@@ -1,4 +1,4 @@
-import prisma from "C:/Users/seuri/napelem/src/app/lib/prisma";
+import prisma from "../../lib/prisma";
 
 export default async function fooldal() {
   const users = await prisma.user.findMany(); // Adatok lekérése az adatbázisból

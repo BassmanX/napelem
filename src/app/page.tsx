@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import LoginForm from 'app/components/LoginForm';
+import LoginForm from './components/LoginForm';
 import styles from 'app/styles/login.module.css';
 import { signIn } from "next-auth/react";
 
