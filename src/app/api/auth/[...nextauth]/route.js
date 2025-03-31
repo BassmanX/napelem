@@ -17,11 +17,10 @@ export const authOptions = {
           if (user && (await bcrypt.compare(credentials.password, user.password))) {
             return { username: user.username, role: user.role };
           }
-
           return null;
         } catch (error) {
           console.error('Hiba a hitelesítés során:', error);
-          return null;
+          return null; // unrelated a hibához
         }
       },
     }),
