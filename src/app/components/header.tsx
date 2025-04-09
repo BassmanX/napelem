@@ -7,8 +7,10 @@ import Logo from '@/app/public/images/header.png'
 export default function Header() {
   return (
     <header className={styles.header}>
+      <div className={styles.headerImageContainer}>
+        <Image src={Logo} alt="Logo" className={styles.headerImage} height={200} />
+      </div>
       <div className={styles.container}>
-        <Image src={Logo} alt="Logo" width={200} />
         <nav id="navbar">
           <a href="/" className={styles.navLink}>Kezdőlap</a>
           <a href="/login" className={styles.navLink}>Bejelentkezés</a>

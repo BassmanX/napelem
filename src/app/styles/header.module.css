@@ -1,55 +1,93 @@
 .header {
   background-color: #578FCA;
   padding: 10px 0;
-  text-align: center;
   width: 100%;
   position: fixed;
   top: 0;
   z-index: 3;
+  display: flex;
+  align-items: center; /* Függőlegesen középre igazítja a navigációt */
+  justify-content: space-between;
+  overflow: visible; /* Hogy a kilógó rész látszódjon */
 }
 
 .header p {
   color: white;
   font-size: 50px;
-  padding: 0px;
-  margin: 0 0 0 0;
+  padding: 0;
+  margin: 0;
+}
+
+/* A Image komponens stílusai */
+.headerImageContainer {
+  position: relative; /* A kép abszolút pozicionálásához */
+  height: 50px; /* A logó eredeti magassága */
+  width: auto; /* A kép szélessége automatikusan */
+  margin-right: 20px; /* Térköz a logó és a navigáció között */
+}
+
+.headerImage {
+  position: absolute;
+  bottom: -130%; /* Példa: ennyivel lógjon le alul */
+  left: 0;
+  height: auto; /* Magasság automatikus a képarány megőrzéséhez */
+  max-height: 125px; /* A header magasságánál kicsit nagyobb lehet */
+  width: auto; /* Szélesség automatikus a képarány megőrzéséhez */
+  z-index: 4; /* A header háttérszíne fölött */
 }
 
 .container {
   max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+  margin-left: auto; /* Jobbra tolja a navigációt */
+  padding: 0;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  text-align: center;
+  z-index: 5; /* A navigáció a logó fölött marad */
+  margin-right: 7%;
 }
 
-.navLink { /* Módosítva: stílusosztály használata */
+
+.navLink {
   margin: 0 10px;
   text-decoration: none;
   color: white;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1068px) {
   .header {
-	position: fixed;
-	max-height: 100px;
-	padding-top: 0px;
+    padding: 10px 10px;
+    align-items: center;
   }
+
+  .headerImageContainer {
+    height: 40px; /* Kisebb magasság kisebb képernyőn */
+    margin-right: 10px;
+  }
+
+  .headerImage {
+    bottom: -5px; /* Kisebb kilógás kisebb képernyőn */
+    max-height: 50px;
+    visibility: hidden;
+  }
+
   .container {
-	font-size: 8px;
+    font-size: 12px;
     flex-direction: column;
     align-items: flex-start;
-  }
-  
-  .container p {
-	font-size: 24px;
-    flex-direction: column;
-    align-items: flex-start;
+    margin-left: 0;
+    text-align: center;
+    margin-right: 10%;
   }
 
   #navbar {
     margin-top: 10px;
-	max-height: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .navLink {
+    margin: 0 5px;
   }
 }
