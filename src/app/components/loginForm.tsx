@@ -25,7 +25,7 @@ export default function LoginForm() {
       setError(result.error);
       setShowPopup(true); 
     } else {
-      router.push('pages/dashboard');
+      router.push('/');
     }
   };
   
