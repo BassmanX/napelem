@@ -12,7 +12,8 @@ export default function Header() {
       </div>
       <div className={styles.container}>
         <nav id="navbar">
-          <a href="/" className={styles.navLink}>Műszerfal</a>
+          <a href="/" className={styles.navLink}>Bejelentkezés</a>
+          <a href="/pages/dashboard" className={styles.navLink}>Műszerfal</a>
         </nav>
       </div>
     </header>

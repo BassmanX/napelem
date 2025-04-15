@@ -1,51 +1,20 @@
 'use client';
+import React from 'react';
+import LoginForm from '@/app/components/loginForm';
+import styles from '@/app/styles/login.module.css';
+import { signIn } from "next-auth/react";
 
-import { useState, useEffect } from 'react';
-import { signOut } from 'next-auth/react';
-
-export default function DashboardPage() {
-  const [userData, setUserData] = useState<{ username: string; role: string } | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('/api/user');
-        if (!response.ok) {
-          throw new Error('Nem sikerült lekérni a felhasználói adatokat');
-        }
-        const data = await response.json();
-        setUserData(data);
-      } catch (err: any) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  if (loading) {
-    return <p>Betöltés...</p>;
-  }
-
-  if (error) {
-    return <p>Hiba: {error}</p>;
-  }
-
-  if (!userData) {
-    return <p>Nem sikerült lekérni a felhasználói adatokat.</p>;
-  }
-
+export default function Login() {
   return (
     <div>
-      <h1>Dashboard</h1>
-      <p>Üdvözöljük, {userData.username}!</p>
-      <p>Szerepkör: {userData.role}</p>
-      <button onClick={() => signOut({ callbackUrl: '/' })}>Kijelentkezés</button>
-      {/* ... a dashboard tartalma ... */}
+      <div className={styles.loginContainer}>
+        <LoginForm />
+      </div>
+	  <div className={styles.infoBox}>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+      </div>
     </div>
   );
 }
