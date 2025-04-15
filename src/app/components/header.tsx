@@ -12,11 +12,7 @@ export default function Header() {
       </div>
       <div className={styles.container}>
         <nav id="navbar">
-          <a href="/" className={styles.navLink}>Kezdőlap</a>
-          <a href="/login" className={styles.navLink}>Bejelentkezés</a>
-          <a href="/dashboard" className={styles.navLink}>Műszerfal</a>
-          <a href="/inventory" className={styles.navLink}>Raktárkészlet</a>
-          <a href="/technicians" className={styles.navLink}>Telepítések</a>
+          <a href="/" className={styles.navLink}>Műszerfal</a>
         </nav>
       </div>
     </header>
