@@ -24,12 +24,10 @@ export async function middleware(request: NextRequest) {
     }
 
     // Ha van token, a felhasználó be van jelentkezve, engedélyezd a hozzáférést
-    alert("Hello, world!");
     return NextResponse.next();
   }
 
   // Ha az útvonal nyilvános, engedélyezd a hozzáférést
-  alert("Hello, world!1");
   return NextResponse.next();
 }
 
