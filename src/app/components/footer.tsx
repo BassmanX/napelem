@@ -5,10 +5,10 @@ export default function Footer() {
   return (
     <footer className={styles.footer}>
       <div className={styles.container}>
-        <p>Napelem Kft.</p>
-        <p>Cím: Példa utca 123, 1234 Példa város</p>
+        <p>E-jon Kft.</p>
+        <p>Cím: 1234 Nem Város, Igen utca 123</p>
         <p>Telefon: +36 1 123 4567</p>
-        <p>E-mail: info@napelemkft.hu</p>
+        <p>E-mail: info@ejon.hu</p>
       </div>
     </footer>
   );
