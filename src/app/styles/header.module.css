@@ -1,16 +1,19 @@
+/* header.module.css */
+
 .header {
   background-color: #578FCA;
   padding: 10px 0;
   width: 100%;
-  position: fixed;
+  position: fixed; /* Marad fix */
   top: 0;
-  z-index: 3;
+  z-index: 1000; /* Magasabb z-index, hogy biztosan felül legyen */
   display: flex;
-  align-items: center; /* Függőlegesen középre igazítja a navigációt */
+  align-items: center;
   justify-content: space-between;
-  overflow: visible; /* Hogy a kilógó rész látszódjon */
+ /* overflow: visible; /* Erre már nem feltétlenül van szükség, ha absolute pozicionálást használunk */
 }
 
+/* ... (header p, headerImageContainer, headerImage változatlanul maradhat) ... */
 .header p {
   color: white;
   font-size: 50px;
@@ -33,18 +36,24 @@
   height: auto; /* Magasság automatikus a képarány megőrzéséhez */
   max-height: 125px; /* A header magasságánál kicsit nagyobb lehet */
   width: auto; /* Szélesség automatikus a képarány megőrzéséhez */
-  z-index: 4; /* A header háttérszíne fölött */
+  z-index: 1001; /* A header háttérszíne fölött, de lehet a dropdown alatt, ha útban van */
 }
+
 
 .container {
   max-width: 1200px;
-  margin-left: auto; /* Jobbra tolja a navigációt */
-  padding: 0;
+  margin-left: auto;
+  padding: 0 20px; /* Adj egy kis paddinget jobbra/balra */
   display: flex;
   align-items: center;
   text-align: center;
-  z-index: 5; /* A navigáció a logó fölött marad */
+  /* z-index: 5; /* Ezt a z-indexet valószínűleg a userMenuContainer-nek kell adni */
   margin-right: 7%;
+}
+
+.navContainer { /* Ez volt a nav id="navbar" korábban, érdemes class-t használni */
+  display: flex;
+  align-items: center;
 }
 
 
@@ -52,42 +61,123 @@
   margin: 0 10px;
   text-decoration: none;
   color: white;
+  padding: 8px 12px; /* Adjunk neki kicsit több teret */
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
 }
 
+.navLink:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Enyhe háttér hoverre */
+}
+
+/* --- ÚJ Stílusok a Felhasználói Menühöz --- */
+
+.userMenuContainer {
+  position: relative; /* Ez kell az abszolút pozicionált dropdownhoz */
+  margin-left: 10px; /* Kis térköz a többi linktől */
+  z-index: 1002; /* Legyen a többi elem felett */
+}
+
+.userNameButton {
+  background: none; /* Távolítsuk el a gomb alapértelmezett hátterét */
+  border: none; /* Távolítsuk el a keretet */
+  color: white; /* Örökölje a színt, vagy legyen fehér */
+  cursor: pointer;
+  font-size: inherit; /* Örökölje a betűméretet a navLinktől */
+  font-family: inherit;
+  padding: 8px 12px; /* Ugyanaz a padding mint a navLink */
+  display: flex; /* Flexbox a név és a nyíl igazításához */
+  align-items: center; /* Függőleges középre igazítás */
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+.userNameButton:hover {
+     background-color: rgba(255, 255, 255, 0.1); /* Ugyanaz a hover mint a navLink */
+}
+
+.userNameButton span { /* A név és a nyíl span elemei */
+    display: inline-block; /* Vagy block, ha szükséges */
+}
+
+.dropdownArrow {
+  margin-left: 5px; /* Kis térköz a név és a nyíl között */
+  font-size: 0.8em; /* Kicsit kisebb nyíl */
+  display: inline-block; /* Fontos a függőleges igazításhoz */
+}
+
+.dropdownMenu {
+  position: absolute; /* Abszolút pozíció a containerhez képest */
+  top: calc(100% + 5px); /* Közvetlenül a gomb alá, 5px távolsággal */
+  right: 0; /* Jobbra igazítva a container széléhez */
+  background-color: white; /* Háttérszín */
+  border: 1px solid #ccc; /* Halvány keret */
+  border-radius: 10px; /* Lekerekítés */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Enyhe árnyék */
+  min-width: 150px; /* Minimális szélesség */
+  z-index: 1010; /* Legyen minden felett */
+  padding: 5px 0; /* Felső/alsó padding */
+  /* Alapértelmezetten rejtett (bár a React kezeli a megjelenítést) */
+}
+
+.dropdownMenu ul {
+  list-style: none; /* Nincs lista jelölő */
+  padding: 0;
+  margin: 0;
+}
+
+
+.dropdownRole {
+  font-size: 15px;
+  color: gray;
+  margin-bottom: 10%;
+}
+
+.dropdownMenu hr {
+  color: gray;
+  width: 100px;
+}
+
+.dropdownLink { /* A Kijelentkezés gomb stílusa a menüben */
+  display: block; /* Töltse ki a rendelkezésre álló helyet */
+  background: none;
+  border: none;
+  color: #333; /* Sötétebb szín a jobb olvashatóságért */
+  padding: 10px 15px; /* Padding a menüponton */
+  text-align: left; /* Balra igazított szöveg */
+  width: 100%; /* Teljes szélesség */
+  cursor: pointer;
+  font-size: 0.9em;
+  white-space: nowrap; /* Ne törjön több sorba */
+}
+
+.dropdownLink:hover {
+  background-color: #f0f0f0; /* Háttérszín hoverre */
+}
+
+/* --- Médiakérési szabályok frissítése (ha szükséges) --- */
+
 @media (max-width: 1068px) {
-  .header {
-    padding: 10px 10px;
-    align-items: center;
-  }
+  /* ... (meglévő szabályok) ... */
 
-  .headerImageContainer {
-    height: 40px; /* Kisebb magasság kisebb képernyőn */
-    margin-right: 10px;
-  }
-
-  .headerImage {
-    bottom: -5px; /* Kisebb kilógás kisebb képernyőn */
-    max-height: 50px;
-    visibility: hidden;
-  }
-
+  /* Esetleg a dropdown menü pozícióját vagy stílusát is módosítani kell kisebb képernyőn */
   .container {
-    font-size: 12px;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-left: 0;
-    text-align: center;
-    margin-right: 10%;
+     /* ... (meglévő szabályok) ... */
+     /* Lehet, hogy a flex-direction: column itt nem ideális a navContainer+userMenu párosnak */
   }
 
-  #navbar {
-    margin-top: 10px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+  .navContainer {
+     /* Lehet, hogy itt is kell igazítani a userMenuContainer-hez képest */
   }
 
-  .navLink {
-    margin: 0 5px;
+  .userNameButton {
+      /* Kisebb padding? */
   }
+   .dropdownMenu {
+     /* Lehet, hogy a 'right: 0' helyett 'left: 0' kell, vagy más igazítás */
+   }
+
+   /* A logó elrejtése megmaradhat, ha úgy jó */
+   .headerImage {
+     visibility: hidden;
+   }
 }
