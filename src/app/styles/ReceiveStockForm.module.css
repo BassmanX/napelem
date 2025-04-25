@@ -1,0 +1,88 @@
+/* src/app/components/ReceiveStockForm.module.css */
+/* Hasonló stílusok mint a NewComponentForm.module.css */
+
+.form { /* ... */ }
+.inputGroup { margin-bottom: 15px; }
+.label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; }
+.input, .select { /* Input és Select stílusai */
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 1em;
+}
+.input:focus, .select:focus { /* Fókusz stílus */
+  outline: none;
+  border-color: #578FCA;
+  box-shadow: 0 0 0 2px rgba(87, 143, 202, 0.2);
+}
+.submitButton {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px; /* Térköz a fölötte lévő elemtől */
+    background-color: #578FCA; /* Kék háttér */
+    color: white; /* Fehér szöveg */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold; /* Félkövér gomb szöveg */
+    transition: background-color 0.2s ease;
+}
+  
+.submitButton:hover:not(:disabled) { /* Hover csak akkor, ha nincs letiltva */
+ background-color: #4a7db3; /* Sötétebb kék hoverre */
+}
+  
+.submitButton:disabled {
+    background-color: #a0c7e8; /* Halványabb kék, ha le van tiltva */
+    cursor: not-allowed; /* Tiltott kurzor */
+}
+  
+.errorMessage { /* A form tetején megjelenő általános hiba */
+    color: #c0392b; /* Pirosas szín */
+    background-color: #fdecea; /* Halvány piros háttér */
+    border: 1px solid #e74c3c; /* Piros keret */
+    padding: 10px 15px;
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 4px;
+}
+  
+.fieldError { /* Az egyes input mezők alatti hibaüzenetek */
+    color: #e74c3c; /* Piros szín */
+    font-size: 0.85em;
+    margin-top: 5px; /* Kis térköz az input felett */
+}
+
+/* Új konténer a rekesz kiválasztóknak */
+.rackSelectionGroup {
+    display: flex;            /* Flexbox elrendezés */
+    flex-wrap: wrap;          /* Törjön új sorba, ha nincs elég hely */
+    gap: 10px;                /* Térköz a legördülők között */
+    margin-top: 5px;          /* Kis térköz a fő címke után */
+  }
+  
+  /* Stílus az egyes legördülő elemeknek (sor, oszlop, szint) */
+  .rackSelectItem {
+    flex: 1;                  /* Egyenlően osztja el a helyet */
+    min-width: 100px;         /* Minimális szélesség, hogy ne legyenek túl keskenyek */
+    display: flex;
+    flex-direction: column;   /* A label (ha lenne) és a select egymás alatt */
+  }
+  
+  /* A legördülő stílusait lehet, hogy kicsit finomítani kell */
+  .select {
+    width: 100%; /* Töltse ki a .rackSelectItem szélességét */
+    /* A többi .select stílus marad (padding, border stb.) */
+  }
+  
+  /* A mezőhibák stílusai (lehet, hogy nem kell módosítani) */
+  .fieldError {
+    color: #e74c3c;
+    font-size: 0.85em;
+    margin-top: 5px;
+    /* Lehet, hogy a hibának kisebb margó kell, ha egymás mellett vannak */
+}

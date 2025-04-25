@@ -8,15 +8,19 @@ import Modal from '@/app/components/Modal';
 import { NewComponentForm } from '@/app/components/NewComponentForm';
 // Importáljuk a módosított árlista komponenst
 import { ComponentPriceList } from '@/app/components/ComponentPriceList';
+import { ReceiveStockForm } from '@/app/components/ReceiveStockForm';
 
 const RaktarvezetoDashboard = () => {
   const [isAddComponentModalOpen, setIsAddComponentModalOpen] = useState(false);
   // Új state az árkezelő modalhoz
   const [isPriceModalOpen, setIsPriceModalOpen] = useState(false);
+  const [isReceiveStockModalOpen, setIsReceiveStockModalOpen] = useState(false);
+
 
   const handleCloseAddComponentModal = () => setIsAddComponentModalOpen(false);
   // Új függvény az árkezelő modal bezárásához
   const handleClosePriceModal = () => setIsPriceModalOpen(false);
+  const handleCloseReceiveStockModal = () => setIsReceiveStockModalOpen(false);
 
   return (
     <div className={styles.dashboardContainer}>
@@ -52,15 +56,17 @@ const RaktarvezetoDashboard = () => {
           </button>
         </div>
 
-        {/* ... (Többi kártya ...) ... */}
-         <div className={styles.card}>
-           <h3 className={styles.cardTitle}>Anyagok Bevételezése</h3>
-           <p className={styles.cardDescription}>Újonnan beérkezett alkatrészek rögzítése...</p>
-           <Link href="/raktarvezeto/bevetel" className={styles.cardLink}>
-             Bevételezés Indítása
-           </Link>
-         </div>
-         {/* ... stb. ... */}
+        {/* B.5: Anyagok Bevételezése - Új Kártya */}
+        <div className={styles.card}>
+          <h3 className={styles.cardTitle}>Anyagok Bevételezése</h3>
+          <p className={styles.cardDescription}>Beérkezett alkatrészek rögzítése és rekeszhez rendelése.</p>
+          <button
+            onClick={() => setIsReceiveStockModalOpen(true)}
+            className={styles.cardLink}
+          >
+            Bevételezés Indítása
+          </button>
+        </div>
 
       </div>
 
@@ -83,6 +89,14 @@ const RaktarvezetoDashboard = () => {
       >
         {/* A módosított lista komponens, ami már lekérdezi az adatokat */}
         <ComponentPriceList />
+      </Modal>
+      {/* Új Bevételezési Modal */}
+      <Modal
+         isOpen={isReceiveStockModalOpen}
+         onClose={handleCloseReceiveStockModal}
+         title="Anyag Bevételezése"
+       >
+         <ReceiveStockForm onFormSubmitSuccess={handleCloseReceiveStockModal} />
       </Modal>
 
     </div>
