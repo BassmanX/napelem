@@ -1,0 +1,73 @@
+/* src/app/components/NewComponentForm.module.css */
+
+.form {
+    margin: 0 auto; /* Középre igazítás a modalon belül, ha szükséges */
+    padding: 0; /* Nincs extra padding magán a formon */
+  }
+  
+  .inputGroup {
+    margin-bottom: 15px; /* Térköz az input csoportok között */
+  }
+  
+  .label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555; /* Kicsit sötétebb szürke */
+  }
+  
+  .input {
+    width: 100%;
+    padding: 10px 12px; /* Padding az input mezőkben */
+    border: 1px solid #ccc; /* Szürke keret */
+    border-radius: 4px; /* Lekerekítés */
+    box-sizing: border-box; /* Padding ne növelje a méretet */
+    font-size: 1em; /* Alapértelmezett betűméret */
+  }
+  
+  /* Opcionális: Fókusz stílus az inputokhoz */
+  .input:focus {
+    outline: none;
+    border-color: #578FCA; /* Kék keret fókuszban */
+    box-shadow: 0 0 0 2px rgba(87, 143, 202, 0.2); /* Enyhe kék árnyék */
+  }
+  
+  .submitButton {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px; /* Térköz a fölötte lévő elemtől */
+    background-color: #578FCA; /* Kék háttér */
+    color: white; /* Fehér szöveg */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold; /* Félkövér gomb szöveg */
+    transition: background-color 0.2s ease;
+  }
+  
+  .submitButton:hover:not(:disabled) { /* Hover csak akkor, ha nincs letiltva */
+    background-color: #4a7db3; /* Sötétebb kék hoverre */
+  }
+  
+  .submitButton:disabled {
+    background-color: #a0c7e8; /* Halványabb kék, ha le van tiltva */
+    cursor: not-allowed; /* Tiltott kurzor */
+  }
+  
+  .errorMessage { /* A form tetején megjelenő általános hiba */
+    color: #c0392b; /* Pirosas szín */
+    background-color: #fdecea; /* Halvány piros háttér */
+    border: 1px solid #e74c3c; /* Piros keret */
+    padding: 10px 15px;
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 4px;
+  }
+  
+  .fieldError { /* Az egyes input mezők alatti hibaüzenetek */
+    color: #e74c3c; /* Piros szín */
+    font-size: 0.85em;
+    margin-top: 5px; /* Kis térköz az input felett */
+  }

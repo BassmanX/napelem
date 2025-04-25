@@ -1,6 +1,6 @@
 .footer {
   background-color: #3674B5;
-  padding: 20px 0;
+  padding: 10px 0;
   text-align: center;
   width: 100%;
   position: fixed;
@@ -10,7 +10,8 @@
 }
 
 .footer p {
-  margin: 10px;
+  margin: 5px;
+  font-size: 12px;
 }
 
 .container {

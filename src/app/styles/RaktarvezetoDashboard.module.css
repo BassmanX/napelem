@@ -1,0 +1,61 @@
+/* src/app/components/dashboards/RaktarvezetoDashboard.module.css */
+
+.dashboardContainer {
+    /* Stílus a fő div konténernek, ha szükséges */
+  }
+  
+  .description {
+    margin-bottom: 30px;
+    color: #555;
+  }
+  
+  .gridContainer {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+  
+  .card {
+    border: 1px solid #ddd;
+    border-radius: 16px;
+    padding: 20px;
+    background-color: #93d0c2;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .cardTitle {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: white;
+    font-size: 1.1em; /* Kicsit nagyobb cím */
+  }
+  
+  .cardDescription {
+    font-size: 0.9em;
+    color: #46635c;
+    flex-grow: 1; /* Kitölti a helyet */
+    margin-bottom: 15px;
+    line-height: 1.5; /* Jobb olvashatóság */
+  }
+  
+  .cardLink {
+    display: inline-block; /* Vagy block, ha teljes szélességű gomb kell */
+    padding: 10px 15px;
+    font-family: inherit;
+    background-color: #578FCA;
+    color: white;
+    text-decoration: none;
+    border-radius: 12px;
+    text-align: center;
+    transition: background-color 0.2s ease;
+    border: none; /* Ha gombként is használnád */
+    cursor: pointer; /* Mutasson kurzort */
+    align-self: flex-start; /* Alulra igazítja a flex konténerben */
+  }
+  
+  .cardLink:hover {
+    background-color: #4a7db3; /* Sötétebb kék hoverre */
+  }

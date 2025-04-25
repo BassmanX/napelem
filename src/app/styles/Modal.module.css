@@ -1,0 +1,65 @@
+/* src/app/components/Modal.module.css */
+
+.modalOverlay {
+    position: fixed; /* Fix pozíció, hogy a teljes képernyőt lefedje */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6); /* Fekete háttér átlátszósággal */
+    display: flex;
+    align-items: center; /* Függőlegesen középre */
+    justify-content: center; /* Vízszintesen középre */
+    z-index: 1050; /* Legyen magasan */
+    overflow-y: auto; /* Engedélyezi a görgetést, ha a tartalom magasabb */
+  }
+  
+  .modalContent {
+    position: relative; /* A bezárás gomb abszolút pozicionálásához */
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    max-width: 600px; /* Maximális szélesség */
+    width: 90%; /* Reszponzív szélesség */
+    max-height: 90vh; /* Maximális magasság, hogy ne lógjon ki */
+    overflow-y: auto; /* Görgetés a tartalmon belül, ha szükséges */
+    z-index: 1051;
+  }
+  
+  .closeButton {
+    position: absolute; /* Abszolút pozíció a content sarkában */
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 2rem; /* Nagyobb X */
+    line-height: 1;
+    color: #aaa; /* Szürke szín */
+    cursor: pointer;
+    padding: 0;
+  }
+  .closeButton:hover {
+      color: #333; /* Sötétebb hoverre */
+  }
+  
+  .modalTitle {
+      margin-top: 0;
+      margin-bottom: 20px;
+      color: #333;
+      font-weight: 600;
+  }
+  
+  /* Opcionális: Animáció a megjelenéshez */
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes slideIn {
+      from { transform: translateY(-30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+  }
+  
+  .modalOverlay { animation: fadeIn 0.3s ease-out; }
+  .modalContent { animation: slideIn 0.3s ease-out; }

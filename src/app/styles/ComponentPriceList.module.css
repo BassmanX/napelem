@@ -1,0 +1,108 @@
+/* src/app/components/ComponentPriceList.module.css */
+
+.tableContainer {
+    overflow-x: auto; /* Görgetés kis képernyőn, ha a táblázat szélesebb */
+    max-height: 60vh; /* Maximális magasság a modalon belül, görgetéssel */
+    margin-top: 15px; /* Kis térköz a modal címétől */
+  }
+  
+  .priceTable {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .tableHeader {
+    background-color: #f8f9fa; /* Világosabb háttér a fejlécnek */
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 2px solid #dee2e6; /* Kicsit hangsúlyosabb alsó vonal */
+    font-weight: 600; /* Félkövér */
+    position: sticky; /* Opcionális: Fejléc rögzítése görgetéskor */
+    top: 0; /* Rögzítés teteje */
+    z-index: 1; /* Legyen a sorok felett */
+  }
+  
+  .tableRow:nth-child(even) {
+    background-color: #fdfdfd; /* Nagyon halvány csíkozás */
+  }
+  .tableRow:hover {
+      background-color: #f1f5f9; /* Enyhe kékesszürke hover */
+  }
+  
+  .tableCell {
+    padding: 8px 12px; /* Kisebb padding a cellákban */
+    border-bottom: 1px solid #e9ecef; /* Vékonyabb vonal a sorok között */
+    vertical-align: middle;
+    font-size: 0.95em; /* Kicsit kisebb betűméret */
+  }
+  
+  .priceForm {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Kisebb térköz */
+    flex-wrap: nowrap; /* Ne törjön sorba */
+  }
+  
+  .priceInput {
+    padding: 6px 8px; /* Kisebb padding */
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    max-width: 100px; /* Kicsit keskenyebb */
+    box-sizing: border-box;
+    font-size: 0.9em;
+  }
+  .priceInput:focus {
+     outline: none;
+     border-color: #80bdff; /* Világosabb kék fókusz */
+     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Bootstrap-szerű fókusz árnyék */
+  }
+  
+  /* Specifikus stílus a number input nyilainak elrejtéséhez (opcionális) */
+  .priceInput[type=number]::-webkit-outer-spin-button,
+  .priceInput[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .priceInput[type=number] {
+    -moz-appearance: textfield; /* Firefox */
+  }
+  
+  
+  .saveButton {
+    padding: 6px 12px; /* Kisebb gomb */
+    background-color: #28a745; /* Bootstrap success zöld */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85em; /* Kisebb betűméret */
+    transition: background-color 0.15s ease-in-out;
+    white-space: nowrap; /* Ne törjön sorba a szöveg */
+  }
+  .saveButton:hover:not(:disabled) {
+    background-color: #218838; /* Sötétebb zöld */
+  }
+  .saveButton:disabled {
+    background-color: #a3d9b1; /* Halványabb zöld, ha tiltva */
+    cursor: not-allowed;
+  }
+  
+  /* Stílusok a visszajelző üzenetekhez a sorban */
+  .inlineMessage {
+    margin-left: 10px;
+    font-size: 0.8em;
+    font-weight: bold;
+    white-space: nowrap;
+  }
+  .successMessage {
+      color: #218838; /* Sötétzöld */
+  }
+  .errorMessage {
+      color: #dc3545; /* Bootstrap danger piros */
+  }
+  .fieldErrorInline { /* Mezöspecifikus hiba (pl. ár validáció) */
+      color: #dc3545;
+      font-size: 0.75em;
+      display: block; /* Új sorba kerüljön az input alatt */
+      margin-top: 2px;
+  }

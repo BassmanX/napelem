@@ -37,7 +37,7 @@ export default function LoginForm() {
     <div className={styles.loginContainer}>
       <form className={styles.loginForm} onSubmit={handleSubmit}>
         <h1>Jelentkezzen be!</h1>
-		<input
+		    <input
           type="text"
           placeholder="Felhasználónév"
           value={username}
