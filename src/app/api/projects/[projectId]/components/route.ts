@@ -19,7 +19,10 @@ interface RouteParams {
     params: { projectId: string };
 }
 
-export async function GET(request: Request, { params }: RouteParams) {
+export async function GET(
+    request: Request,
+    { params }: { params: { projectId: string } } 
+){
   // --- Session és Jogosultság Ellenőrzés ---
   const session = await getServerSession(authOptions);
   // Ki láthatja? Szakember, Raktárvezető? Esetleg Raktáros (C.2)?
