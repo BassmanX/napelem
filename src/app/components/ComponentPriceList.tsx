@@ -3,7 +3,7 @@
 
 import React, { useActionState, useState, useEffect } from 'react';
 import { useFormStatus } from 'react-dom';
-import { updateComponentPrice, type UpdatePriceFormState } from '@/app/actions/componentActions';
+import { updateComponentDetails, type UpdateComponentFormState } from '@/app/actions/componentActions';
 import styles from '@/app/styles/ComponentPriceList.module.css';
 
 // --- TÍPUS DEFINÍCIÓJA ITT! ---
@@ -28,49 +28,74 @@ function UpdateButton({ componentId }: { componentId: number }) {
 // --- ComponentRow definíciója ---
 function ComponentRow({ component }: { component: ComponentWithPriceString }) {
   // ... (ComponentRow többi kódja változatlan, használhatja az <UpdateButton />-t) ...
-    const initialState: UpdatePriceFormState = undefined;
-    const [state, formAction] = useActionState(updateComponentPrice, initialState);
+    const initialState: UpdateComponentFormState = undefined;
+    const [state, formAction] = useActionState<UpdateComponentFormState, FormData>(updateComponentDetails, initialState);
     const [currentPrice, setCurrentPrice] = useState(component.price);
+    const [currentMaxQty, setCurrentMaxQty] = useState(component.maxQuantityPerRack.toString()); // Kezeljük stringként az inputban
 
-    const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-       setCurrentPrice(event.target.value);
-    };
+    const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => setCurrentPrice(e.target.value);
+    const handleMaxQtyChange = (e: React.ChangeEvent<HTMLInputElement>) => setCurrentMaxQty(e.target.value);
+    
     const messageStyle = state?.success ? styles.successMessage : styles.errorMessage;
 
     return (
       <tr className={styles.tableRow}>
+        {/* Név Cella */}
         <td className={styles.tableCell}>{component.name}</td>
+  
+        {/* Ár és Max/Rekesz Cella (formmal) */}
         <td className={styles.tableCell}>
-          <form action={formAction} className={styles.priceForm}>
-            {/* ... (inputok) ... */}
+          <form action={formAction} className={styles.editForm}> {/* Új class a formnak? */}
             <input type="hidden" name="componentId" value={component.id} />
-            <input
-              type="number" name="price" value={currentPrice}
-              onChange={handlePriceChange} step="0.01" min="0" required
-              className={styles.priceInput} aria-describedby={`price-error-${component.id}`}
-            />
-            {/* Az UpdateButton itt használva */}
-            <UpdateButton componentId={component.id} />
-            {/* ... (hibaüzenetek) ... */}
-             {state?.componentId === component.id && state?.message && (
-               <span className={`${messageStyle} ${styles.inlineMessage}`} aria-live="polite">
-                   {state.message}
-                    {state.errors?.price && state.errors.price.map((error: string) => (
-                        <span key={error} className={styles.fieldError}> ({error})</span>
-                    ))}
-               </span>
-             )}
-              <div id={`price-error-${component.id}`} aria-live="polite" aria-atomic="true">
-                   {state?.componentId === component.id && state?.errors?.price && state.errors.price.map((error: string) => (
-                    <p key={error} className={styles.fieldErrorInline}>{error}</p>
-                ))}
-              </div>
+  
+            {/* Ár Input */}
+            <div className={styles.inputWrapper}>
+                <label htmlFor={`price-${component.id}`} className={styles.inputLabel}>Ár:</label>
+                <input
+                  id={`price-${component.id}`}
+                  type="number" name="price" value={currentPrice}
+                  onChange={handlePriceChange} step="0.01" min="0" required
+                  className={styles.editInput} // Közös input stílus
+                  aria-describedby={`price-error-${component.id}`}
+                />
+                 <div id={`price-error-${component.id}`} className={styles.fieldErrorContainer}>
+                   {state?.componentId === component.id && state?.errors?.price?.map(e => <p key={e} className={styles.fieldErrorInline}>{e}</p>)}
+                 </div>
+            </div>
+  
+            {/* Max/Rekesz Input */}
+            <div className={styles.inputWrapper}>
+                <label htmlFor={`maxqty-${component.id}`} className={styles.inputLabel}>Max/Rekesz:</label>
+                <input
+                  id={`maxqty-${component.id}`}
+                  type="number" name="maxQuantityPerRack" value={currentMaxQty}
+                  onChange={handleMaxQtyChange} min="1" step="1" required
+                  className={styles.editInput} // Közös input stílus
+                  aria-describedby={`maxqty-error-${component.id}`}
+                />
+                <div id={`maxqty-error-${component.id}`} className={styles.fieldErrorContainer}>
+                  {state?.componentId === component.id && state?.errors?.maxQuantityPerRack?.map(e => <p key={e} className={styles.fieldErrorInline}>{e}</p>)}
+                </div>
+            </div>
+  
+            {/* Mentés Gomb */}
+            <div className={styles.buttonWrapper}>
+               <UpdateButton componentId={component.id} />
+            </div>
+  
+  
+            {/* Általános Visszajelzés ehhez a sorhoz */}
+            {state?.componentId === component.id && state?.message && (
+              <span className={`${messageStyle} ${styles.inlineMessage}`} aria-live="polite">
+                  {state.message}
+              </span>
+            )}
+  
           </form>
         </td>
-        <td className={styles.tableCell}>{component.maxQuantityPerRack}</td>
       </tr>
     );
-}
+  }
 // ------------------------------
 
 
@@ -113,22 +138,21 @@ export function ComponentPriceList() {
      if (components.length === 0) return <p>Nincsenek alkatrészek a rendszerben.</p>;
 
      return (
-         <div className={styles.tableContainer}>
-           <table className={styles.priceTable}>
-             <thead>
-               <tr>
-                 <th className={styles.tableHeader}>Név</th>
-                 <th className={styles.tableHeader}>Ár (Ft) és Mentés</th>
-                  <th className={styles.tableHeader}>Max/Rekesz</th>
-               </tr>
-             </thead>
-             <tbody>
-               {components.map((component) => (
-                 <ComponentRow key={component.id} component={component} />
-               ))}
-             </tbody>
-           </table>
-         </div>
-       );
+      <div className={styles.tableContainer}>
+        <table className={styles.priceTable}>
+          <thead>
+            <tr>
+              <th className={styles.tableHeader}>Név</th>
+              <th className={styles.tableHeader}>Szerkesztés (Ár Ft, Max/Rekesz db)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {components.map((component) => (
+              <ComponentRow key={component.id} component={component} />
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
 }
 // ----------------------------------------

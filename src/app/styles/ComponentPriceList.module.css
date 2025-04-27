@@ -106,3 +106,59 @@
       display: block; /* Új sorba kerüljön az input alatt */
       margin-top: 2px;
   }
+  .editForm {
+    display: flex;
+    align-items: flex-start; /* Igazítás, ha a hibák is megjelennek */
+    gap: 15px; /* Térköz az ár, max/rekesz és gomb között */
+    flex-wrap: wrap; /* Törjön, ha nincs elég hely */
+  }
+  
+  .inputWrapper {
+    display: flex;
+    flex-direction: column; /* Label és input egymás alatt */
+    gap: 3px;
+    flex-grow: 1; /* Növekedjen, hogy kitöltse a helyet */
+  }
+  
+  .inputLabel {
+      font-size: 0.8em; /* Kisebb label */
+      color: #666;
+      display: block; /* Blokk elem */
+  }
+  
+  .editInput { /* Közös stílus az inputoknak a formon belül */
+    padding: 6px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    /* max-width: 100px; /* Lehet, hogy ezt ki kell venni, vagy nagyobbra állítani */
+    width: 100%; /* Töltse ki a wrapper szélességét */
+    box-sizing: border-box;
+    font-size: 0.9em;
+  }
+  .editInput:focus {
+     outline: none;
+     border-color: #578FCA;
+     box-shadow: 0 0 0 2px rgba(87, 143, 202, 0.2);
+  }
+  
+  .buttonWrapper {
+      align-self: center; /* Próbálja középre igazítani a gombot a flex sorban */
+      padding-top: 15px; /* Hogy kb egy vonalban legyen az inputtal, ha a label is ott van */
+  }
+  
+  .saveButton { /* Ezt a stílust már definiáltuk korábban */
+    /* ... */
+     white-space: nowrap;
+  }
+  
+  
+  .fieldErrorContainer { /* Konténer a mezőhibáknak */
+      min-height: 1.2em; /* Foglaljon helyet, hogy ne ugráljon a layout */
+      margin-top: 2px;
+  }
+  
+  .fieldErrorInline {
+      color: #dc3545;
+      font-size: 0.8em;
+      display: block;
+  }

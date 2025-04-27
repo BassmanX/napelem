@@ -45,14 +45,14 @@ const RaktarvezetoDashboard = () => {
 
         {/* B.2: Árak Módosítása - Modal nyitó gomb */}
         <div className={styles.card}>
-          <h3 className={styles.cardTitle}>Árak Módosítása</h3>
-          <p className={styles.cardDescription}>Meglévő alkatrészek árának frissítése...</p>
+          <h3 className={styles.cardTitle}>Alkatrész Adatainak Módosítása</h3>
+          <p className={styles.cardDescription}>Meglévő alkatrészek árának, rekeszenként tárolható maximális mennyiségének frissítése...</p>
           {/* Gomb, ami az új state-et állítja */}
           <button
             onClick={() => setIsPriceModalOpen(true)}
             className={styles.cardLink}
           >
-            Árak Kezelése
+            Kezelés
           </button>
         </div>
 
@@ -85,7 +85,7 @@ const RaktarvezetoDashboard = () => {
       <Modal
         isOpen={isPriceModalOpen}
         onClose={handleClosePriceModal}
-        title="Alkatrész Árak Módosítása"
+        title="Alkatrész Adatainak Módosítása"
       >
         {/* A módosított lista komponens, ami már lekérdezi az adatokat */}
         <ComponentPriceList />

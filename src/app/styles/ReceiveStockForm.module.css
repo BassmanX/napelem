@@ -86,3 +86,27 @@
     margin-top: 5px;
     /* Lehet, hogy a hibának kisebb margó kell, ha egymás mellett vannak */
 }
+
+/* Stílus a textarea elemhez (pl. a Leírás mezőhöz) */
+.textarea {
+  display: block; /* Blokk elem legyen */
+  width: 100%;    /* Töltse ki a rendelkezésre álló szélességet */
+  padding: 10px 12px; /* Belső térköz, mint az inputoknál */
+  border: 1px solid #ccc; /* Keret, mint az inputoknál */
+  border-radius: 4px;    /* Lekerekítés, mint az inputoknál */
+  box-sizing: border-box;/* Méretezés konzisztenciája */
+  font-family: inherit;  /* Örökölje a form betűtípusát */
+  font-size: 1em;        /* Betűméret, mint az inputoknál */
+  line-height: 1.5;      /* Jobb olvashatóság többsoros szövegnél */
+  min-height: 80px;      /* Minimális magasság (pl. 3-4 sornyi) */
+  resize: vertical;      /* Csak függőlegesen lehessen átméretezni (opcionális, de hasznos) */
+  /* resize: none; */    /* Ha nem akarod, hogy átméretezhető legyen */
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; /* Finom átmenet fókuszhoz */
+}
+
+/* Fókusz stílus, mint az inputoknál */
+.textarea:focus {
+  outline: none;
+  border-color: #578FCA; /* Ugyanaz a kék, mint az inputoknál */
+  box-shadow: 0 0 0 2px rgba(87, 143, 202, 0.2); /* Ugyanaz az árnyék */
+}

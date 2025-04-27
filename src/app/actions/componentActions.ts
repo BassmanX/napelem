@@ -12,12 +12,20 @@ import { redirect } from 'next/navigation';
 
 const prisma = new PrismaClient();
 
-// --- MEGLÉVŐ Zod Séma és Típusok ---
-const ComponentSchema = z.object({
-  name: z.string().min(1, { message: "A név megadása kötelező." }),
+// --- Átnevezett/Bővített Zod Séma ---
+const UpdateComponentSchema = z.object({
+  id: z.coerce.number().int().positive(),
   price: z.coerce.number().positive({ message: "Az ár csak pozitív szám lehet." })
           .transform(val => new Prisma.Decimal(val)),
-  maxQuantityPerRack: z.coerce.number().int().positive({ message: "A maximális mennyiség csak pozitív egész szám lehet." }),
+  // Új mező validálása:
+  maxQuantityPerRack: z.coerce.number().int().positive({ message: "A max. mennyiség pozitív egész szám kell legyen." }),
+});
+
+const ComponentSchema = z.object({
+    name: z.string().min(1, { message: "A név megadása kötelező." }),
+    price: z.coerce.number().positive({ message: "Az ár csak pozitív szám lehet." })
+            .transform(val => new Prisma.Decimal(val)),
+    maxQuantityPerRack: z.coerce.number().int().positive({ message: "A maximális mennyiség csak pozitív egész szám lehet." }),
 });
 
 export type FormState = {
@@ -36,13 +44,14 @@ const UpdatePriceSchema = z.object({
           .transform(val => new Prisma.Decimal(val)), // Átalakítás Prisma Decimal-ra
 });
 
-// --- ÚJ State Típus az Ár Frissítéshez ---
-export type UpdatePriceFormState = {
+// --- Átnevezett/Bővített State Típus ---
+export type UpdateComponentFormState = {
     message: string;
     componentId?: number;
     success?: boolean;
     errors?: {
         price?: string[];
+        maxQuantityPerRack?: string[]; // Hiba az új mezőhöz
     };
 } | undefined;
 
@@ -102,61 +111,59 @@ export async function createComponent(prevState: FormState, formData: FormData):
 }
 
 
-// --- ÚJ FÜGGVÉNY: updateComponentPrice ---
-// FONTOS: Az 'export' kulcsszó kell elé!
-export async function updateComponentPrice(prevState: UpdatePriceFormState, formData: FormData): Promise<UpdatePriceFormState> {
-    console.log("updateComponentPrice action elindult");
+export async function updateComponentDetails(prevState: UpdateComponentFormState, formData: FormData): Promise<UpdateComponentFormState> {
+    console.log("updateComponentDetails action elindult");
 
-    // --- Jogosultság Ellenőrzés (FONTOS!) ---
-    // Implementáld a Raktárvezető szerepkör ellenőrzését itt is!
-    // const session = await getServerSession(authOptions);
-    // if (session?.user?.role !== 'raktarvezeto') {
-    //    return { message: 'Hiba: Nincs jogosultsága ehhez a művelethez.', success: false };
-    // }
-    console.warn("Figyelem: Jogosultságellenőrzés kihagyva az updateComponentPrice action-ben!");
+    // --- Jogosultság Ellenőrzés (Raktárvezető) ---
+    console.warn("Figyelem: Jogosultságellenőrzés kihagyva az updateComponentDetails action-ben!");
+    // Implementáld!
+    // --------------------------------------------
 
-    // FormData feldolgozása és validálása
     const componentId = parseInt(formData.get('componentId') as string, 10);
-    const validatedFields = UpdatePriceSchema.safeParse({
+
+    // Adatok validálása a bővített sémával
+    const validatedFields = UpdateComponentSchema.safeParse({
         id: componentId,
         price: formData.get('price'),
+        maxQuantityPerRack: formData.get('maxQuantityPerRack'), // Új mező olvasása
     });
 
     if (!validatedFields.success) {
-        console.error("Árfrissítés validálási hiba:", validatedFields.error.flatten().fieldErrors);
+        console.error("Komponens frissítés validálási hiba:", validatedFields.error.flatten().fieldErrors);
         return {
-            message: `Hiba: Kérjük, javítsa az árat.`, // Általános validációs hibaüzenet
-            componentId: componentId, // Adjunk kontextust, melyik sornál volt a hiba
+            message: `Hiba: Kérjük, javítsa az adatokat.`,
+            componentId: componentId,
             success: false,
-            errors: validatedFields.error.flatten().fieldErrors, // Részletes mezőhibák
+            errors: validatedFields.error.flatten().fieldErrors, // Tartalmazhatja a maxQuantity hibát is
         };
     }
 
-    // Adatbázis frissítés
+    // Adatbázis frissítés (mindkét mezővel)
     try {
         await prisma.component.update({
             where: { id: validatedFields.data.id },
             data: {
                 price: validatedFields.data.price,
+                maxQuantityPerRack: validatedFields.data.maxQuantityPerRack, // Új mező frissítése
             },
         });
-        console.log(`Alkatrész (ID: ${componentId}) árának frissítése sikeres.`);
+        console.log(`Alkatrész (ID: ${componentId}) adatainak frissítése sikeres.`);
 
     } catch (error) {
-        console.error(`Adatbázis hiba az ár frissítésekor (ID: ${componentId}):`, error);
+        console.error(`Adatbázis hiba frissítéskor (ID: ${componentId}):`, error);
         return {
-            message: `Adatbázis hiba: Nem sikerült frissíteni az árat.`,
+            message: `Adatbázis hiba: Nem sikerült frissíteni az adatokat.`,
             componentId: componentId,
             success: false,
         };
     }
 
     // Cache invalidálása
-    revalidatePath('/raktarvezeto/alkatresz/arak'); // Az árkezelő oldal cache-ének invalidálása
+    revalidatePath('/raktarvezeto/alkatresz/arak'); // Az árkezelő oldal (ahol a lista van)
 
-    // Sikeres válasz visszaküldése a formnak
+    // Sikeres válasz
     return {
-        message: `Ár sikeresen frissítve!`,
+        message: `Adatok sikeresen frissítve!`,
         componentId: componentId,
         success: true,
      };

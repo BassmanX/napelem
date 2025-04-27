@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { signOut } from 'next-auth/react';
-
+import styles from '@/app/styles/dashboard.module.css';
 // Importáld a szerepkör-specifikus komponenseket (az elérési út eltérhet!)
 import RaktarvezetoDashboard from '@/app/components/dashboards/RaktarvezetoDashboard';
 import RaktarosDashboard from '@/app/components/dashboards/RaktarosDashboard';
@@ -100,13 +100,7 @@ export default function DashboardPage() {
 
   // --- Sikeres betöltés, felhasználói adattal ---
   return (
-    <div>
-      <h1>Dashboard</h1>
-      <p>Üdvözöljük, {userData.username}!</p>
-      <p>Szerepkör: {userData.role}</p>
-      <button onClick={() => signOut({ callbackUrl: '/' })}>Kijelentkezés</button>
-      <hr />
-
+    <div className={styles.pageContainer}>
       {/* A szerepkörnek megfelelő tartalom megjelenítése */}
       {renderDashboardContent()}
 

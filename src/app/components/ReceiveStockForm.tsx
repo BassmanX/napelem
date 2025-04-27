@@ -65,7 +65,14 @@ export function ReceiveStockForm({ onFormSubmitSuccess }: ReceiveStockFormProps)
   }, []);
 
   // Sikeres action utáni teendők
-   useEffect(() => { /* ... (változatlan) ... */ }, [state, onFormSubmitSuccess]);
+     useEffect(() => {
+     if (state?.success) {
+       formRef.current?.reset();
+       if (onFormSubmitSuccess) {
+         onFormSubmitSuccess();
+       }
+     }
+   }, [state, onFormSubmitSuccess]);
 
 
   // --- Dinamikus opciók generálása a legördülőkhöz ---
@@ -121,7 +128,6 @@ export function ReceiveStockForm({ onFormSubmitSuccess }: ReceiveStockFormProps)
 
   return (
     <form ref={formRef} action={formAction} className={styles.form}>
-       {state?.message && !state.success && ( <p className={styles.errorMessage}>...</p> )}
 
       {/* Alkatrész Kiválasztása */}
       <div className={styles.inputGroup}>

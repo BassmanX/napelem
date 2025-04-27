@@ -122,7 +122,7 @@ export async function receiveStock(prevState: ReceiveStockFormState, formData: F
 
     } catch (error: any) {
         console.error("Hiba a bevételezés során:", error);
-        if (error.message.includes("meghaladná a rekesz maximális kapacitását")) {
+        if (error.message.includes("meghaladná a rekesz")) {
              return { message: error.message, success: false, errors: { general: [error.message] } };
         }
         return { message: 'Adatbázis hiba: A bevételezés nem sikerült.', success: false };

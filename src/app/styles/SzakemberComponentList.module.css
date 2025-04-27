@@ -1,0 +1,49 @@
+/* src/app/components/SzakemberComponentList.module.css */
+.tableContainer {
+    overflow-x: auto;
+    margin-top: 15px;
+    border: 1px solid #eee; /* Opcionális keret a táblázat körül */
+    border-radius: 8px;
+  }
+  
+  .projectTable {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px; /* Minimális szélesség, hogy ne essen szét nagyon */
+  }
+  
+  .tableHeader {
+    background-color: #f8f9fa;
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 2px solid #dee2e6;
+    font-weight: 600;
+    font-size: 0.9em;
+    color: #495057;
+    white-space: nowrap;
+  }
+  
+  .tableRow:nth-child(even) {
+    background-color: #fdfdfd;
+  }
+  .tableRow:hover {
+      background-color: #f1f5f9;
+  }
+  
+  .tableCell {
+    padding: 10px 15px;
+    border-bottom: 1px solid #e9ecef;
+    vertical-align: middle;
+    font-size: 0.9em;
+    color: #495057;
+  }
+
+/* Elérhetőség színezése */
+.available {
+    font-weight: bold;
+    color: #198754; /* zöld */
+}
+.unavailable {
+    color: #dc3545; /* piros */
+    font-weight: normal;
+}

@@ -1,0 +1,101 @@
+/* src/app/components/ProjectList.module.css */
+
+.tableContainer {
+    overflow-x: auto;
+    margin-top: 15px;
+    border: 1px solid #eee; /* Opcionális keret a táblázat körül */
+    border-radius: 8px;
+  }
+  
+  .projectTable {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px; /* Minimális szélesség, hogy ne essen szét nagyon */
+  }
+  
+  .tableHeader {
+    background-color: #f8f9fa;
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 2px solid #dee2e6;
+    font-weight: 600;
+    font-size: 0.9em;
+    color: #495057;
+    white-space: nowrap;
+  }
+  
+  .tableRow:nth-child(even) {
+    background-color: #fdfdfd;
+  }
+  .tableRow:hover {
+      background-color: #f1f5f9;
+  }
+  
+  .tableCell {
+    padding: 10px 15px;
+    border-bottom: 1px solid #e9ecef;
+    vertical-align: middle;
+    font-size: 0.9em;
+    color: #495057;
+  }
+  
+  /* Státusz jelvény stílusa */
+  .statusBadge {
+      display: inline-block;
+      padding: 4px 8px;
+      font-size: 0.8em;
+      font-weight: 600;
+      color: white; /* A háttérszín alapján jó kontraszt kell */
+      border-radius: 12px; /* Kapszula forma */
+      white-space: nowrap;
+  }
+  
+  /* Művelet gombok stílusa */
+  .actionButton {
+      background: none;
+      border: 1px solid transparent; /* Kezdetben átlátszó keret */
+      padding: 5px 8px;
+      margin-right: 5px; /* Kis térköz a gombok között */
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.85em;
+      transition: all 0.2s ease;
+  }
+  .actionButton:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+  }
+  
+/* Új stílus a "Megtekintés" gombhoz */
+.viewButton {
+    color: #6c757d; /* Semleges szürke (Bootstrap secondary) */
+    border-color: #6c757d; /* Hozzáillő keret */
+}
+.viewButton:hover:not(:disabled) {
+    background-color: #5a6268; /* Kicsit sötétebb szürke hoverre */
+    border-color: #545b62;
+    color: white; /* Fehér szöveg hoverre */
+}
+
+/* Emlékeztető a többi gombra (csak kontextus) */
+.assignButton {
+    color: #0d6efd; /* Kék */
+    border-color: #0d6efd;
+}
+.assignButton:hover:not(:disabled) {
+    background-color: #0d6efd;
+    color: white;
+}
+
+.estimateButton {
+     color: #ffc107; /* Sárga */
+     border-color: #ffc107;
+}
+.estimateButton:hover:not(:disabled) {
+     background-color: #ffc107;
+     color: #333;
+}
+  
+  
+  /* Utolsó cella igazítása (opcionális) */
+  /* td:last-child { text-align: right; } */

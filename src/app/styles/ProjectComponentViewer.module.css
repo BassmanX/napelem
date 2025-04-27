@@ -1,0 +1,82 @@
+/* src/app/components/ProjectComponentViewer.module.css */
+
+.listContainer {
+    margin-top: 10px; /* Kisebb felső margó a modal címtől */
+    max-height: 65vh; /* Limitáljuk a magasságot, legyen görgethető */
+    overflow-y: auto; /* Függőleges görgetés, ha kell */
+    padding-right: 5px; /* Kis hely a görgetősávnak, ha megjelenik */
+    border: 1px solid #eee; /* Opcionális: Halvány keret */
+    border-radius: 4px; /* Opcionális: Lekerekítés */
+  }
+  
+  .componentList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%; /* Teljes szélesség kihasználása */
+  }
+  
+  /* Közös stílus a fejlécnek és a lista elemeknek */
+  .listItem,
+  .listHeader {
+    display: flex; /* Flexbox az elemek elrendezéséhez */
+    justify-content: space-between; /* Elemek szétosztása */
+    align-items: center; /* Függőleges középre igazítás */
+    padding: 10px 15px; /* Egységes belső térköz */
+    border-bottom: 1px solid #f0f0f0; /* Elválasztó vonal */
+    text-align: left; /* Balra igazítás alapból */
+  }
+  
+  /* Fejléc stílusai */
+  .listHeader {
+    font-weight: 600; /* Félkövér */
+    color: #495057; /* Sötétebb szürke */
+    background-color: #f8f9fa; /* Világos háttér */
+    border-bottom-width: 2px; /* Vastagabb alsó vonal */
+    border-color: #dee2e6;
+    position: sticky; /* Fejléc rögzítése */
+    top: 0;          /* Rögzítés a konténer tetejére */
+    z-index: 1;      /* Legyen a lista elemek felett */
+  }
+  
+  .listHeader span:first-child {
+      /* Név oszlop a fejlécben */
+  }
+  
+  .listHeader span:last-child {
+      /* Mennyiség oszlop a fejlécben */
+      text-align: right; /* Jobbra igazítás a fejlécben */
+      min-width: 80px; /* Minimális szélesség, hogy ne ugorjon */
+  }
+  
+  
+  /* Lista elemek stílusai */
+  .listItem {
+      font-size: 0.95em;
+      color: #333;
+  }
+  
+  /* Páros sorok háttere (opcionális) */
+  .listItem:nth-child(even) {
+      background-color: #fafafa;
+  }
+  
+  .listItem:last-child {
+    border-bottom: none; /* Utolsó elemnek nincs alsó vonala */
+  }
+  
+  /* Név span */
+  .listItem span:first-child {
+    flex-grow: 1;        /* Kitölti a helyet */
+    margin-right: 15px;  /* Térköz a mennyiségtől */
+    word-break: break-word; /* Hosszú nevek tördelése */
+  }
+  
+  /* Mennyiség span */
+  .listItem span:last-child {
+    font-weight: 500;     /* Kicsit vastagabb */
+    white-space: nowrap; /* Ne törjön sorba */
+    text-align: right;  /* Jobbra igazítás */
+    min-width: 80px;    /* Ugyanaz a min. szélesség, mint a fejlécben */
+    flex-shrink: 0;   /* Ne zsugorodjon */
+  }
