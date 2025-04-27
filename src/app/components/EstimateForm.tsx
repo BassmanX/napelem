@@ -60,7 +60,7 @@ export function EstimateForm({ projectId, onFormSubmitSuccess }: EstimateFormPro
             <label htmlFor="workFee" className={styles.label}>Munkadíj (Ft):</label>
             <input
                type="number" id="workFee" name="workFee"
-               min="0" step="0.01" // Lehet tizedes is
+               min="0" step="1" // Lehet tizedes is
                className={styles.input} aria-describedby="workFee-error"
                 // Ide lehetne a projekt jelenlegi értékét betölteni
              />

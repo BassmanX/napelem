@@ -82,7 +82,7 @@ export function NewComponentForm({ onFormSubmitSuccess }: NewComponentFormProps)
           id="price"
           name="price"
           required
-          step="0.01"
+          step="1"
           min="0"
           className={styles.input}
           aria-describedby="price-error"
