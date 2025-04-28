@@ -1,0 +1,51 @@
+/* src/app/components/MissingComponentsList.module.css */
+.tableContainer {
+    margin-top: 15px;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+  
+  .infoText {
+      font-size: 0.9em;
+      color: #555;
+      margin-bottom: 15px;
+      padding: 10px;
+      background-color: #f8f9fa;
+      border: 1px solid #eee;
+      border-radius: 4px;
+  }
+  
+  .missingTable {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .tableHeader {
+    background-color: #f8f9fa;
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 2px solid #dee2e6;
+    font-weight: 600;
+    font-size: 0.9em;
+    color: #495057;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  
+  .tableRow:nth-child(even) { background-color: #fdfdfd; }
+  .tableRow:hover { background-color: #f1f5f9; }
+  
+  .tableCell {
+    padding: 8px 12px;
+    border-bottom: 1px solid #e9ecef;
+    vertical-align: middle;
+    font-size: 0.95em;
+  }
+  .tableCell:last-child { /* Elérhető oszlop */
+      font-weight: bold;
+  }
+  
+  .unavailable {
+      color: #dc3545; /* Piros */
+  }

@@ -1,0 +1,67 @@
+/* src/app/components/CostCalculationViewer.module.css */
+.loading, .info {
+    padding: 20px;
+    text-align: center;
+    color: #666;
+}
+
+.errorContainer {
+    padding: 15px;
+    background-color: #fdecea;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    border-radius: 4px;
+}
+.errorContainer h4 {
+    margin-top: 0;
+    color: #721c24;
+}
+.missingList {
+    margin-top: 10px;
+    padding-left: 20px;
+    font-size: 0.9em;
+}
+.missingList li {
+    margin-bottom: 5px;
+}
+
+
+.successContainer {
+     padding: 15px;
+     background-color: #d1e7dd;
+     border: 1px solid #badbcc;
+     color: #0f5132;
+     border-radius: 4px;
+}
+.successContainer h4 {
+    margin-top: 0;
+    color: #0f5132;
+}
+.successMessage {
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.costTable {
+    margin-top: 15px;
+    font-size: 0.95em;
+}
+.costTable div {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    border-bottom: 1px solid #c3e6cb;
+}
+.costTable div:last-child {
+    border-bottom: none;
+}
+.totalRow {
+    font-weight: bold;
+    margin-top: 5px;
+    padding-top: 10px !important;
+    border-top: 2px solid #b1dfc9;
+
+}
+.costTable span:last-child {
+    font-weight: bold;
+}

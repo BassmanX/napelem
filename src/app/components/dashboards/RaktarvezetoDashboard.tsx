@@ -9,18 +9,25 @@ import { NewComponentForm } from '@/app/components/NewComponentForm';
 // Importáljuk a módosított árlista komponenst
 import { ComponentPriceList } from '@/app/components/ComponentPriceList';
 import { ReceiveStockForm } from '@/app/components/ReceiveStockForm';
+import { MissingComponentsList } from '@/app/components/MissingComponentsList';
+import { MissingReservedComponentsList } from '@/app/components/MissingReservedComponentsList';
 
 const RaktarvezetoDashboard = () => {
   const [isAddComponentModalOpen, setIsAddComponentModalOpen] = useState(false);
   // Új state az árkezelő modalhoz
   const [isPriceModalOpen, setIsPriceModalOpen] = useState(false);
   const [isReceiveStockModalOpen, setIsReceiveStockModalOpen] = useState(false);
+  const [isMissingComponentsModalOpen, setIsMissingComponentsModalOpen] = useState(false);
+  const [isMissingReservedModalOpen, setIsMissingReservedModalOpen] = useState(false);
 
 
   const handleCloseAddComponentModal = () => setIsAddComponentModalOpen(false);
   // Új függvény az árkezelő modal bezárásához
   const handleClosePriceModal = () => setIsPriceModalOpen(false);
   const handleCloseReceiveStockModal = () => setIsReceiveStockModalOpen(false);
+  const handleCloseMissingComponentsModal = () => setIsMissingComponentsModalOpen(false);
+  const handleCloseMissingReservedModal = () => setIsMissingReservedModalOpen(false);
+
 
   return (
     <div className={styles.dashboardContainer}>
@@ -68,6 +75,30 @@ const RaktarvezetoDashboard = () => {
           </button>
         </div>
 
+        {/* B.3: Hiányzó Alkatrészek Kártya/Gomb */}
+        <div className={styles.card}>
+          <h3 className={styles.cardTitle}>Hiányzó Alkatrészek</h3>
+          <p className={styles.cardDescription}>Azon alkatrészek listája, melyekből rendelni szükséges (készlet ˂= foglalt).</p>
+          <button
+            onClick={() => setIsMissingComponentsModalOpen(true)}
+            className={styles.cardLink} // Használj megfelelő stílust
+          >
+            Lista Megtekintése
+          </button>
+        </div>
+
+        {/* B.4: Hiányzó & Lefoglalt Kártya/Gomb */}
+        <div className={styles.card}>
+          <h3 className={styles.cardTitle}>Hiányzó & Lefoglalt</h3>
+          <p className={styles.cardDescription}>Azon hiányzó alkatrészek, melyekre már van aktív projekt foglalás.</p>
+          <button
+            onClick={() => setIsMissingReservedModalOpen(true)}
+            className={styles.cardLink}
+          >
+            Lista Megtekintése
+          </button>
+        </div>
+
       </div>
 
       {/* --- Modális Ablakok --- */}
@@ -98,7 +129,22 @@ const RaktarvezetoDashboard = () => {
        >
          <ReceiveStockForm onFormSubmitSuccess={handleCloseReceiveStockModal} />
       </Modal>
-
+      {/* ÚJ: Hiányzó Alkatrészek Modal */}
+      <Modal
+         isOpen={isMissingComponentsModalOpen}
+         onClose={handleCloseMissingComponentsModal}
+         title="Hiányzó Alkatrészek Listája"
+       >
+         <MissingComponentsList />
+       </Modal>
+      {/* ÚJ: Hiányzó & Lefoglalt Alkatrészek Modal */}
+      <Modal
+         isOpen={isMissingReservedModalOpen}
+         onClose={handleCloseMissingReservedModal}
+         title="Hiányzó és Lefoglalt Alkatrészek"
+       >
+         <MissingReservedComponentsList />
+      </Modal>
     </div>
   );
 };

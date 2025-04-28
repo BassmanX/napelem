@@ -1,7 +1,7 @@
 // src/app/components/dashboards/SzakemberDashboard.tsx
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link'; 
 import styles from '@/app/styles/RaktarvezetoDashboard.module.css'; // Hozz létre egy CSS modult ehhez is
 import Modal from '@/app/components/Modal';
@@ -10,9 +10,11 @@ import type { Status } from '@prisma/client';
 import { ProjectList } from '@/app/components/ProjectList';
 import { SzakemberComponentList } from '@/app/components/SzakemberComponentList';
 import { AssignComponentsForm } from '@/app/components/AssignComponentsForm';
-import { ProjectComponentViewer } from '@/app/components/ProjectComponentViewer';
+import { ProjectDetailsViewer } from '@/app/components/ProjectDetailsViewer';
 import { EstimateForm } from '@/app/components/EstimateForm';
-
+import { CostCalculationViewer } from '@/app/components/CostCalculationViewer';
+import { calculateProjectCost, type CalculationResultState } from '@/app/actions/projectActions';
+import { useRouter } from 'next/navigation'
 
 // Props interfész kiegészítése (már tartalmazza a modal nyitókat)
 interface SzakemberDashboardProps {
@@ -31,10 +33,14 @@ export type ProjectListData = {
 };
 
 
-const SzakemberDashboard = () => {
+const SzakemberDashboard = ({ projects: initialProjectsData }: /* ... */ any) => {
+  const router = useRouter();
   const [isNewProjectModalOpen, setIsNewProjectModalOpen] = useState(false);
   const [isComponentListModalOpen, setIsComponentListModalOpen] = useState(false);
-  const handleCloseNewProjectModal = () => setIsNewProjectModalOpen(false);
+  const handleCloseNewProjectModal = () => {
+    setIsNewProjectModalOpen(false);
+    router.refresh();
+  };
   const handleCloseComponentListModal = () => setIsComponentListModalOpen(false);
   const [projects, setProjects] = useState<ProjectListData[]>([]);
   const [isLoadingProjects, setIsLoadingProjects] = useState(true);
@@ -45,6 +51,11 @@ const SzakemberDashboard = () => {
   const [selectedProjectIdForView, setSelectedProjectIdForView] = useState<number | null>(null);
   const [isEstimateModalOpen, setIsEstimateModalOpen] = useState(false);
   const [selectedProjectIdForEstimate, setSelectedProjectIdForEstimate] = useState<number | null>(null);
+
+  const [isCalcModalOpen, setIsCalcModalOpen] = useState(false);
+  const [selectedProjectIdForCalc, setSelectedProjectIdForCalc] = useState<number | null>(null);
+  const [calculationResult, setCalculationResult] = useState<CalculationResultState>(null);
+  const [isCalculating, setIsCalculating] = useState(false);
   
   const handleOpenAssignModal = (projectId: number) => {
     setSelectedProjectIdForAssign(projectId);
@@ -59,7 +70,7 @@ const SzakemberDashboard = () => {
     setSelectedProjectIdForView(projectId);
     setIsViewComponentsModalOpen(true);
   };
-   const handleCloseViewComponentsModal = () => {
+  const handleCloseViewComponentsModal = () => {
     setIsViewComponentsModalOpen(false);
     setSelectedProjectIdForView(null);
   };
@@ -69,10 +80,64 @@ const SzakemberDashboard = () => {
       setSelectedProjectIdForEstimate(projectId);
       setIsEstimateModalOpen(true);
   };
-   const handleCloseEstimateModal = () => {
+  const handleCloseEstimateModal = () => {
       setIsEstimateModalOpen(false);
       setSelectedProjectIdForEstimate(null);
   };
+
+  // --- A fetchProjects függvény definíciója ---
+  // Használjunk useCallback-et, hogy ne definiálódjon újra feleslegesen
+  const fetchProjects = useCallback(async () => {
+    setIsLoadingProjects(true);
+    setProjectError(null);
+    try {
+      const response = await fetch('/api/projects');
+      if (!response.ok) { /* ... Hiba ... */ throw new Error('...'); }
+      const data: ProjectListData[] = await response.json();
+      setProjects(data);
+    } catch (err: any) { /* ... Hiba ... */ }
+    finally { setIsLoadingProjects(false); }
+  }, []); // Üres függőség, mert a fetch maga nem függ külső változótól
+
+  // --- Első lekérdezés mountoláskor ---
+  useEffect(() => {
+    fetchProjects();
+  }, [fetchProjects]); // fetchProjects most már a dependency
+
+
+  // --- Kalkuláció indítása ÉS UTÁNA ÚJRAHÍVÁS ---
+  const handleOpenCalcModal = useCallback(async (projectId: number) => {
+      setSelectedProjectIdForCalc(projectId);
+      setIsCalcModalOpen(true);
+      setIsCalculating(true);
+      setCalculationResult(null);
+      let result: CalculationResultState = null; // Változó az eredménynek
+      try {
+          result = await calculateProjectCost(projectId);
+          setCalculationResult(result);
+
+          // ---> ITT AZ ÚJ RÉSZ: Sikeres kalkuláció után frissítjük a listát <---
+          if (result?.success) {
+              console.log("Kalkuláció sikeres, projektlista újratöltése...");
+              await fetchProjects(); // Meghívjuk újra a lekérdező függvényt
+          }
+          // --------------------------------------------------------------------
+
+      } catch (error) {
+          console.error("Hiba a calculateProjectCost hívása közben:", error);
+          setCalculationResult({ success: false, message: "Kliens oldali hiba a kalkuláció indításakor." });
+      } finally {
+          setIsCalculating(false);
+      }
+  }, [fetchProjects]); // Most már függ a fetchProjects-től is!
+
+const handleCloseCalcModal = () => {
+    setIsCalcModalOpen(false);
+    setSelectedProjectIdForCalc(null);
+    setCalculationResult(null); // Eredmény törlése bezáráskor
+};
+
+
 
 
     // --- Adatlekérdezés useEffect-ben ---
@@ -142,6 +207,7 @@ const SzakemberDashboard = () => {
             onOpenAssignModal={handleOpenAssignModal}
             onOpenEstimateModal={handleOpenEstimateModal} // Itt adjuk át
             onOpenViewComponentsModal={handleOpenViewComponentsModal}
+            onOpenCalcModal={handleOpenCalcModal}
         />
       </div>
 
@@ -182,7 +248,7 @@ const SzakemberDashboard = () => {
              onClose={handleCloseViewComponentsModal}
              title={`Hozzárendelt Alkatrészek (Projekt ID: ${selectedProjectIdForView})`}
            >
-             <ProjectComponentViewer projectId={selectedProjectIdForView} />
+             <ProjectDetailsViewer projectId={selectedProjectIdForView} />
            </Modal>
       )}
 
@@ -199,6 +265,20 @@ const SzakemberDashboard = () => {
              />
            </Modal>
       )}
+
+        {/* ÚJ: Árkalkuláció Modal */}
+        {selectedProjectIdForCalc !== null && (
+           <Modal
+             isOpen={isCalcModalOpen}
+             onClose={handleCloseCalcModal}
+             title={`Árkalkuláció (Projekt ID: ${selectedProjectIdForCalc})`}
+           >
+             <CostCalculationViewer
+                 isLoading={isCalculating}
+                 result={calculationResult}
+             />
+           </Modal>
+      )} 
 
 
     </div>

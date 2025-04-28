@@ -33,7 +33,7 @@ export function AssignComponentsForm({ projectId, onFormSubmitSuccess }: AssignC
     async function loadComponents() {
       setIsLoading(true); setError(null);
       try {
-        const response = await fetch('/api/componentsStatus?fields=id,name'); // Egyszerűsített komponens lista
+        const response = await fetch('/api/components-status?fields=id,name'); // Egyszerűsített komponens lista
         if (!response.ok) throw new Error('Alkatrészek lekérdezése sikertelen.');
         const data = await response.json();
         setAvailableComponents(data);

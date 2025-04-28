@@ -106,7 +106,7 @@ export async function createComponent(prevState: FormState, formData: FormData):
     } catch (error) {
         console.error("Hiba a revalidatePath során:", error);
     }
-    redirect('/raktarvezeto/dashboard');
+    redirect('/pages/dashboard');
 
 }
 

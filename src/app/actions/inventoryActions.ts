@@ -8,6 +8,131 @@ import { revalidatePath } from 'next/cache';
 
 const prisma = new PrismaClient();
 
+// Típus a bemeneti adathoz (melyik komponensből mennyit kell)
+type PickedItemInput = {
+    componentId: number;
+    quantity: number;
+};
+
+// State típus
+export type CompletePickingState = {
+    message: string;
+    success: boolean;
+    error?: string; // Részletesebb hiba
+} | undefined;
+
+// Server Action a kivételezés befejezéséhez
+export async function completePicking(
+    projectId: number,
+    // A komponens listát kapjuk, amit ki kellett venni
+    itemsToPick: PickedItemInput[]
+): Promise<CompletePickingState> {
+    console.log(`completePicking action elindult (Projekt ID: ${projectId})`);
+
+    // --- Jogosultság Ellenőrzés (Raktáros) ---
+    console.warn("Figyelem: Jogosultságellenőrzés kihagyva a completePicking action-ben!");
+    // Implementáld!
+    // --------------------------------------
+
+    if (!projectId || !itemsToPick || itemsToPick.length === 0) {
+        return { success: false, message: "Hiányzó projekt ID vagy kivételezendő tételek." };
+    }
+
+    try {
+        await prisma.$transaction(async (tx) => {
+            console.log(`Tranzakció indítva a ${projectId} kivételezéséhez.`);
+
+            // Végigmegyünk minden kivételezendő alkatrészen
+            for (const item of itemsToPick) {
+                let quantityToDecrement = item.quantity; // Ennyit kell még összesen kivenni ebből az alkatrészből
+                const componentId = item.componentId;
+
+                console.log(`Feldolgozás: Komponens ID ${componentId}, Szükséges: ${quantityToDecrement} db`);
+
+                // Lekérdezzük azokat a rekeszeket, ahol van ebből az alkatrészből,
+                // rendezve (pl. hogy logikus sorrendben próbáljuk kivenni)
+                const locations = await tx.inventoryItem.findMany({
+                    where: {
+                        componentId: componentId,
+                        quantity: { gt: 0 } // Csak ahol van készlet
+                    },
+                    select: {
+                        rackId: true,
+                        quantity: true
+                    },
+                    orderBy: { rackId: 'asc' } // Vagy más rendezés
+                });
+
+                if (locations.length === 0 && quantityToDecrement > 0) {
+                     throw new Error(`Nincs elérhető készlet a(z) ${componentId} ID-jű komponenshez.`);
+                }
+
+                console.log(`  Talált lokációk (${componentId}):`, locations);
+
+                // Végigmegyünk a lokációkon és csökkentjük a készletet
+                for (const loc of locations) {
+                    if (quantityToDecrement <= 0) break; // Már megvan a szükséges mennyiség
+
+                    const canTakeFromHere = Math.min(loc.quantity, quantityToDecrement); // Ennyit tudunk kivenni innen
+
+                    console.log(`  Rekesz ID ${loc.rackId}: Van ${loc.quantity} db, kiveszünk ${canTakeFromHere} db-ot.`);
+
+                    // Készlet csökkentése ebben a rekeszben
+                    await tx.inventoryItem.update({
+                        where: {
+                            componentId_rackId: {
+                                componentId: componentId,
+                                rackId: loc.rackId
+                            }
+                        },
+                        data: {
+                            quantity: {
+                                decrement: canTakeFromHere
+                            }
+                        }
+                    });
+
+                    quantityToDecrement -= canTakeFromHere; // Csökkentjük a még szükséges mennyiséget
+                }
+
+                // Ellenőrzés a ciklus végén: Sikerült-e mindent kivenni?
+                if (quantityToDecrement > 0) {
+                    // Ez akkor fordulhat elő, ha a lekérdezés és a kivétel között elfogyott a készlet (versenyhelyzet)
+                    // vagy ha az API lekérdezés (C.2) és ez a logika nincs összhangban.
+                    console.error(`Készlethiba a(z) ${componentId} komponensnél! Hiányzik még ${quantityToDecrement} db.`);
+                    throw new Error(`Nem sikerült elegendő mennyiséget (${item.quantity} db) kivenni a(z) ${componentId} ID-jű komponensből.`);
+                }
+                 console.log(`  Komponens ${componentId} kivételezése kész.`);
+            } // for (item of itemsToPick) vége
+
+            // Ha minden alkatrész készletének csökkentése sikeres volt,
+            // töröljük a foglalásokat (ProjectComponent rekordokat) ehhez a projekthez.
+            console.log(`Foglalások törlése a ${projectId} projekthez...`);
+            const deleteResult = await tx.projectComponent.deleteMany({
+                where: { projectId: projectId }
+            });
+            console.log(`  ${deleteResult.count} foglalás törölve.`);
+
+        }); // Tranzakció vége
+
+        console.log(`Projekt (ID: ${projectId}) kivételezése sikeresen befejezve.`);
+
+    } catch (error: any) {
+        console.error(`Adatbázis hiba kivételezés befejezésekor (Projekt ID: ${projectId}):`, error);
+        return { message: error.message || 'Adatbázis hiba: Nem sikerült befejezni a kivételezést.', success: false, error: error.message };
+    }
+
+    // Sikeres művelet után cache invalidálása
+    revalidatePath('/raktaros/dashboard'); // Raktáros nézet
+    revalidatePath(`/api/projects/${projectId}/picking-list`); // Az adott projekt listája
+    revalidatePath('/api/components/missing'); // Hiányzó komponensek listája változhatott
+    revalidatePath('/api/components/missing-reserved');
+    revalidatePath('/api/components/status');
+
+
+    return { message: 'Kivételezés sikeresen befejezve, készlet frissítve, foglalások törölve!', success: true };
+}
+
 // Módosított Zod séma: row, column, level kell, nem rackId
 const ReceiveStockSchema = z.object({
   componentId: z.coerce.number().int().positive(),

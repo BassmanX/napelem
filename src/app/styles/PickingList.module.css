@@ -1,0 +1,202 @@
+/* src/app/components/PickingList.module.css */
+.container { margin-top: 20px; }
+.container h3 { margin-bottom: 15px; }
+
+.list { /* A kártyák konténere */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.itemCard {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.itemHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #ddd;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+
+.componentName {
+    font-weight: bold;
+    color: #333;
+}
+
+.requiredQuantity {
+    font-size: 0.9em;
+    color: #555;
+    font-weight: 500;
+}
+
+.locationList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.locationItem, .locationHeader {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 15px;
+    font-size: 0.9em;
+    border-bottom: 1px solid #eee;
+}
+.locationItem:last-child { border-bottom: none; }
+
+.locationHeader {
+    font-weight: 600;
+    color: #666;
+    background-color: #fafafa;
+}
+
+.locationItem span:last-child { /* Mennyiség */
+    text-align: right;
+    min-width: 60px;
+}
+
+.noLocation {
+    padding: 10px 15px;
+    color: #dc3545; /* Piros */
+    font-style: italic;
+    font-size: 0.9em;
+}
+
+.completeButton { /* A végleges gomb stílusa */
+    margin-top: 25px;
+    padding: 10px 20px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.completeButton:hover { background-color: #5a6268; }
+
+.routeList {
+    list-style: none; /* Nincs alapértelmezett lista stílus */
+    padding: 0;
+    margin-top: 20px;
+}
+
+.routeStep {
+    display: flex; /* Szám és tartalom egymás mellett */
+    gap: 15px;    /* Térköz közöttük */
+    padding: 15px 10px;
+    border-bottom: 1px solid #eee;
+    background-color: #fff;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+.routeStep:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+
+.stepNumber {
+    font-size: 1.4em;
+    font-weight: bold;
+    color: #578FCA; /* Kék */
+    min-width: 30px; /* Fix szélesség a számnak */
+    text-align: right;
+}
+
+.stepContent {
+    flex-grow: 1; /* Kitölti a maradék helyet */
+}
+
+.rackInfo {
+    font-weight: 500;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed #ddd;
+}
+
+.itemsInRackList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.itemToPick {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    font-size: 0.95em;
+}
+
+.pickComponentName {
+    /* Név */
+    color: #333;
+}
+
+.pickQuantity {
+    /* Mennyiség */
+    font-weight: bold;
+    min-width: 50px; /* Hely a darabszámnak */
+    text-align: right;
+}
+
+.itemToPick {
+    display: flex;
+    align-items: center; /* Elemek függőleges igazítása */
+    gap: 10px; /* Térköz a checkbox, név és mennyiség között */
+    padding: 6px 0;
+    font-size: 0.95em;
+}
+
+.pickCheckbox {
+    margin-right: 5px; /* Kis térköz a szövegtől */
+    cursor: pointer;
+    width: 16px; /* Méretezés */
+    height: 16px;
+}
+
+.pickComponentName {
+    flex-grow: 1;
+    color: #333;
+    cursor: pointer; /* Kattinthatóvá teszi a labelt is */
+}
+
+.pickQuantity { /* ... (marad) ... */ }
+
+.completeButton {
+    margin-top: 25px;
+    padding: 12px 25px;
+    background-color: #198754; /* Zöld */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+}
+.completeButton:hover:not(:disabled) {
+    background-color: #157347;
+}
+.completeButton:disabled {
+    background-color: #a3d9b1;
+    cursor: not-allowed;
+}
+
+.errorMessage { /* Általános hibaüzenet a complete actionhöz */
+    color: #c0392b;
+    background-color: #fdecea;
+    border: 1px solid #e74c3c;
+    padding: 10px 15px;
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 4px;
+}

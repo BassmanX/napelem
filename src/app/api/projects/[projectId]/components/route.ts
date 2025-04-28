@@ -1,9 +1,8 @@
 // src/app/api/projects/[projectId]/components/route.ts
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/app/lib/authOptions'; // Igazítsd az útvonalat!
-import { NextRequest } from 'next/server';
 
 const prisma = new PrismaClient();
 

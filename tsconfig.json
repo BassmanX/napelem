@@ -1,9 +1,11 @@
 {
   "compilerOptions": {
-	"baseUrl": "./src",
+    "baseUrl": "./src",
     "paths": {
-      "@/*": ["./*"]
-	},
+      "@/*": [
+        "./*"
+      ]
+    },
     "target": "ES2017",
     "lib": [
       "dom",
@@ -32,8 +34,9 @@
     "next-env.d.ts",
     ".next/types/**/*.ts",
     "**/*.ts",
-    "**/*.tsx"
-, "src/app/api/auth/[...nextauth]/route.js"  ],
+    "**/*.tsx",
+    "src/app/api/auth/[...nextauth]/route.js"
+  ],
   "exclude": [
     "node_modules"
   ]

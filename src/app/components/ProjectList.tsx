@@ -5,6 +5,8 @@ import React from 'react';
 import type { ProjectListData } from '@/app/api/projects/route'; // Típus importálása
 import { Status } from '@prisma/client'; // Status enum importálása
 import styles from '@/app/styles/ProjectList.module.css'; // Hozz létre CSS modult
+import { closeProject } from '@/app/actions/projectActions'; 
+import { useRouter } from 'next/navigation';
 
 interface ProjectListProps {
     projects: ProjectListData[];
@@ -12,6 +14,7 @@ interface ProjectListProps {
     onOpenAssignModal: (projectId: number) => void;
     onOpenEstimateModal: (projectId: number) => void; // Későbbi A.5 funkcióhoz
     onOpenViewComponentsModal: (projectId: number) => void;
+    onOpenCalcModal: (projectId: number) => void;
 }
 
 // Segédfüggvény a státuszok magyarításához/színezéséhez
@@ -28,26 +31,32 @@ function getStatusDisplay(status: Status): { text: string; color: string } {
     }
 }
 
-export function ProjectList({ projects, onOpenAssignModal, onOpenEstimateModal, onOpenViewComponentsModal }: ProjectListProps) {
+export function ProjectList({ projects, onOpenAssignModal, onOpenEstimateModal, onOpenViewComponentsModal, onOpenCalcModal }: ProjectListProps) {
+    const router = useRouter();
 
     if (!projects || projects.length === 0) {
         return <p>Nincsenek megjeleníthető projektek.</p>;
     }
 
-    // Későbbi funkciókhoz (A.4, A.5) szükséges lehet state vagy függvények itt
-
-    const handleAssignComponents = (projectId: number) => {
-        // TODO: Modális ablak nyitása alkatrész hozzárendeléshez (A.4)
-        console.log(`Alkatrészek hozzárendelése ehhez: ${projectId}`);
-        alert(`TODO: Modal nyitása az alkatrészek hozzárendeléséhez (ID: ${projectId})`);
+    // --- Handler a projekt lezárásához ---
+    const handleCloseProject = async (projectId: number, finalStatus: "completed" | "failed") => {
+        const statusText = finalStatus === Status.completed ? "sikeresként" : "sikertelenként";
+        // Megerősítő kérdés
+        if (window.confirm(`Biztosan le akarja zárni a(z) ${projectId} ID-jű projektet ${statusText}?`)) {
+            console.log(`Lezárás indítása: ID=${projectId}, Státusz=${finalStatus}`);
+            try {
+                const result = await closeProject(projectId, finalStatus); // Server Action hívása
+                alert(result?.message || "Ismeretlen válasz a szervertől."); // Egyszerű visszajelzés
+                if (result?.success) {
+                    router.refresh(); // Lista frissítése sikeres zárás után
+                }
+            } catch (error) {
+                 console.error("Hiba a closeProject action hívása közben:", error);
+                 alert("Hiba történt a projekt lezárása közben.");
+            }
+        }
     };
-
-     const handleAddEstimate = (projectId: number) => {
-        // TODO: Modális ablak nyitása becslés hozzáadásához (A.5)
-        console.log(`Becslés hozzáadása ehhez: ${projectId}`);
-         alert(`TODO: Modal nyitása a becslések rögzítéséhez (ID: ${projectId})`);
-    };
-
+    // ------------------------------------
 
     return (
         <div className={styles.tableContainer}>
@@ -69,6 +78,8 @@ export function ProjectList({ projects, onOpenAssignModal, onOpenEstimateModal, 
                         const canAssignComponents = project.status === Status.new || project.status === Status.draft;
                         // Meghatározzuk, lehet-e becslést adni
                         const canAddEstimate = project.status === Status.draft; // Pl. csak piszkozatnál
+                        const canCalculate = (project.status === Status.draft || project.status === Status.wait); // Feltétel a kalkulációhoz
+                        const canBeClosed = project.status === Status.inprogress; // Pl. csak folyamatban lévőt
 
                         return (
                             <tr key={project.id} className={styles.tableRow}>
@@ -117,7 +128,31 @@ export function ProjectList({ projects, onOpenAssignModal, onOpenEstimateModal, 
                                      >
                                          Becslés
                                      </button>
-                                      {/* Ide jöhet még pl. "Részletek" gomb */}
+                                     <button
+                                         onClick={() => onOpenCalcModal(project.id)}
+                                         className={`${styles.actionButton} ${styles.calculateButton}`} // Új CSS class kell!
+                                         title="Árkalkuláció indítása"
+                                         disabled={!canCalculate} // Letiltás feltétel alapján
+                                     >
+                                         Kalkuláció {/* Vagy ikon */}
+                                     </button>
+                                     {/* ÚJ: Lezáró Gombok */}
+                                     <button
+                                          onClick={() => handleCloseProject(project.id, Status.completed)}
+                                          className={`${styles.actionButton} ${styles.completeButton}`} // Új CSS class
+                                          title="Projekt sikeres befejezése"
+                                          disabled={!canBeClosed} // Csak akkor aktív, ha zárható
+                                     >
+                                          Befejezés ✓
+                                     </button>
+                                     <button
+                                          onClick={() => handleCloseProject(project.id, Status.failed)}
+                                          className={`${styles.actionButton} ${styles.failButton}`} // Új CSS class
+                                          title="Projekt sikertelen lezárása"
+                                          disabled={!canBeClosed} // Csak akkor aktív, ha zárható
+                                      >
+                                          Lezárás ✕
+                                     </button>
                                 </td>
                             </tr>
                         );

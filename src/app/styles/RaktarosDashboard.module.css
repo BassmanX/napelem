@@ -1,0 +1,40 @@
+/* src/app/components/dashboards/RaktarosDashboard.module.css */
+
+.dashboardContainer {
+    /* Használhatod ugyanazt a paddinget/max-width-et, mint a többi dashboardnál,
+       ha az a fő '/pages/dashboard' komponens CSS-ében van (.pageContainer),
+       akkor itt lehet, hogy nem is kell külön padding.
+       Ha mégis kellene itt extra térköz: */
+    /* padding: 20px; */
+  }
+  
+  .description {
+    margin-bottom: 25px; /* Térköz a leírás és a lista között */
+    color: #555;
+    font-size: 1em;
+    line-height: 1.6;
+  }
+  
+  /* Stílus a projektlista szakasznak */
+  .projectListSection {
+    margin-top: 30px; /* Térköz a felette lévő elemtől */
+    /* Itt lehetne keretet vagy hátteret adni, ha el akarod különíteni */
+    /* border: 1px solid #eee; */
+    /* padding: 20px; */
+    /* border-radius: 8px; */
+  }
+  
+  /* Stílus a projektlista H3 címének */
+  .projectListSection h3 {
+    margin-top: 0; /* Nincs felső margó, ha ez az első elem a sectionben */
+    margin-bottom: 15px;
+    padding-bottom: 10px; /* Térköz a vonalig */
+    border-bottom: 1px solid #e0e0e0; /* Elválasztó vonal */
+    font-size: 1.3em; /* Kicsit nagyobb cím */
+    color: #333;
+  }
+  
+  /* Megjegyzés: Ha a Raktárosnak is lennének "kártyái" vagy gombjai a lista
+     felett/mellett, akkor a .gridContainer, .card, .cardTitle stb. stílusokat
+     átvehetnéd a RaktarvezetoDashboard.module.css-ből.
+     Jelenleg a Raktárosnak csak a lista kell a C.1-hez. */
