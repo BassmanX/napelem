@@ -45,7 +45,3 @@
     margin-left: -30px;
   }
   
-  /* Megjegyzés: Ha a Raktárosnak is lennének "kártyái" vagy gombjai a lista
-     felett/mellett, akkor a .gridContainer, .card, .cardTitle stb. stílusokat
-     átvehetnéd a RaktarvezetoDashboard.module.css-ből.
-     Jelenleg a Raktárosnak csak a lista kell a C.1-hez. */
