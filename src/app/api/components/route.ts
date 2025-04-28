@@ -39,4 +39,5 @@ export async function GET(request: Request) {
     console.error("Hiba az alkatrészek API lekérdezésekor:", error);
     return NextResponse.json({ message: 'Szerverhiba történt az alkatrészek lekérdezése közben.' }, { status: 500 });
   }
+  
 }
