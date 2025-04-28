@@ -69,11 +69,12 @@
   
   
   .saveButton {
+    font-family: inherit;
     padding: 6px 12px; /* Kisebb gomb */
     background-color: #28a745; /* Bootstrap success zöld */
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 0.85em; /* Kisebb betűméret */
     transition: background-color 0.15s ease-in-out;
@@ -144,11 +145,6 @@
   .buttonWrapper {
       align-self: center; /* Próbálja középre igazítani a gombot a flex sorban */
       padding-top: 15px; /* Hogy kb egy vonalban legyen az inputtal, ha a label is ott van */
-  }
-  
-  .saveButton { /* Ezt a stílust már definiáltuk korábban */
-    /* ... */
-     white-space: nowrap;
   }
   
   

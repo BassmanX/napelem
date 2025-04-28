@@ -5,6 +5,7 @@ import React, { useState, useEffect, useRef, useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { assignComponentsToProject, type AssignComponentsFormState } from '@/app/actions/projectActions';
 import styles from '@/app/styles/AssignComponentsForm.module.css'; // Hozz létre CSS-t!
+import { useRouter } from 'next/navigation';
 
 type ComponentOption = { id: number; name: string; }; // Alkatrész opció típusa
 
@@ -27,6 +28,7 @@ export function AssignComponentsForm({ projectId, onFormSubmitSuccess }: AssignC
   const [selectedItems, setSelectedItems] = useState<{ componentId: string; quantity: string }[]>([{ componentId: '', quantity: '1' }]); // Hozzárendelendő tételek
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   // Alkatrészlista lekérdezése
   useEffect(() => {
@@ -47,9 +49,13 @@ export function AssignComponentsForm({ projectId, onFormSubmitSuccess }: AssignC
   useEffect(() => {
     if (state?.success) {
       alert(state.message); // Vagy jobb visszajelzés
+      // ---> router.refresh() HÍVÁSA ITT <---
+      console.log("AssignComponentsForm: Action sikeres, router.refresh() hívása...");
+      router.refresh();
+      // ----------------------------------
       if (onFormSubmitSuccess) onFormSubmitSuccess();
     }
-  }, [state, onFormSubmitSuccess]);
+  }, [state, onFormSubmitSuccess, router]);
 
   // --- Sor Kezelő Függvények ---
   const handleItemChange = (index: number, field: 'componentId' | 'quantity', value: string) => {

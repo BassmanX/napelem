@@ -53,20 +53,20 @@ export function MissingComponentsList() {
         <thead>
           <tr>
             <th className={styles.tableHeader}>Név</th>
-            <th className={styles.tableHeader}>Teljes Készlet</th>
-            <th className={styles.tableHeader}>Foglalt</th>
-            <th className={styles.tableHeader}>Elérhető</th>
+            <th className={styles.tableHeaderRight}>Teljes Készlet</th>
+            {/* <th className={styles.tableHeader}>Foglalt</th>
+            <th className={styles.tableHeader}>Elérhető</th> */}
           </tr>
         </thead>
         <tbody>
           {missingComponents.map((comp) => (
             <tr key={comp.id} className={styles.tableRow}>
               <td className={styles.tableCell}>{comp.name}</td>
-              <td className={styles.tableCell}>{comp.totalStock} db</td>
-              <td className={styles.tableCell}>{comp.reservedStock} db</td>
+              <td className={styles.tableCellRight}>{comp.totalStock} db</td>
+              {/* <td className={styles.tableCell}>{comp.reservedStock} db</td>
               <td className={`${styles.tableCell} ${styles.unavailable}`}>
                 {comp.availableStock} db
-              </td>
+              </td> */}
             </tr>
           ))}
         </tbody>

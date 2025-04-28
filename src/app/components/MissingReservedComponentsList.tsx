@@ -51,7 +51,14 @@ export function MissingReservedComponentsList() {
     <div className={styles.tableContainer}>
       <p className={styles.infoText}>Az alábbi hiányzó alkatrészekre már van leadott foglalás projektekhez.</p>
       <table className={styles.missingTable}>
-         <thead>{/* ... Ugyanaz a fejléc ... */}</thead>
+        <thead>
+          <tr>
+            <th className={styles.tableHeader}>Név</th>
+            <th className={styles.tableHeader}>Teljes Készlet</th>
+            <th className={styles.tableHeader}>Foglalt</th>
+            <th className={styles.tableHeader}>Szükséges</th>
+          </tr>
+        </thead>
          <tbody>
            {components.map((comp) => (
              <tr key={comp.id} className={styles.tableRow}>

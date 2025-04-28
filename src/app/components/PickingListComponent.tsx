@@ -259,7 +259,7 @@ export function PickingListComponent({ projectId, onPickingComplete }: PickingLi
                                 {item.componentName}
                             </label>
                             <span className={styles.pickQuantity}>
-                                {item.quantityAvailableInRack} db
+                                {item.totalRequiredForProject} db
                             </span>
                         </li>
                     );

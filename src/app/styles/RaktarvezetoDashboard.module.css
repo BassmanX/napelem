@@ -1,7 +1,8 @@
 /* src/app/components/dashboards/RaktarvezetoDashboard.module.css */
 
 .dashboardContainer {
-    /* Stílus a fő div konténernek, ha szükséges */
+    padding-left: 20px;
+    padding-right: 20pxss;
   }
   
   .description {
@@ -17,7 +18,7 @@
   
   .card {
     border: 1px solid #ddd;
-    border-radius: 16px;
+    border-radius: 25px;
     padding: 20px;
     background-color: #93d0c2;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -45,17 +46,38 @@
     display: inline-block; /* Vagy block, ha teljes szélességű gomb kell */
     padding: 10px 15px;
     font-family: inherit;
-    background-color: #578FCA;
+    font-size: 14px;
+    background-color: #6e9d92;
     color: white;
     text-decoration: none;
     border-radius: 12px;
     text-align: center;
     transition: background-color 0.2s ease;
+    transition: color 0.2s ease;
     border: none; /* Ha gombként is használnád */
     cursor: pointer; /* Mutasson kurzort */
     align-self: flex-start; /* Alulra igazítja a flex konténerben */
   }
   
   .cardLink:hover {
-    background-color: #4a7db3; /* Sötétebb kék hoverre */
+    background-color: rgb(248, 248, 248); /* Sötétebb kék hoverre */
+    color: #6e9d92;
+  }
+
+
+
+  .projectListSection {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
+  .h2title {
+    background-color: #578fca;
+    color: white;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 100%;
+    margin-left: -30px;
   }

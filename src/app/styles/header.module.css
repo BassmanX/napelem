@@ -10,6 +10,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
  /* overflow: visible; /* Erre már nem feltétlenül van szükség, ha absolute pozicionálást használunk */
 }
 

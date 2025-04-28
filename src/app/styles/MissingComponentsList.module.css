@@ -49,3 +49,24 @@
   .unavailable {
       color: #dc3545; /* Piros */
   }
+
+  .tableCellRight {
+    text-align: right;
+    padding: 8px 12px;
+    border-bottom: 1px solid #e9ecef;
+    vertical-align: middle;
+    font-size: 0.95em;
+  }
+
+  .tableHeaderRight {
+    text-align: right;
+    background-color: #f8f9fa;
+    padding: 10px 12px;
+    border-bottom: 2px solid #dee2e6;
+    font-weight: 600;
+    font-size: 0.9em;
+    color: #495057;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }

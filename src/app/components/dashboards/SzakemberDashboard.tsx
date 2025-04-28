@@ -33,14 +33,10 @@ export type ProjectListData = {
 };
 
 
-const SzakemberDashboard = ({ projects: initialProjectsData }: /* ... */ any) => {
-  const router = useRouter();
+const SzakemberDashboard = () => {
+ // const router = useRouter();
   const [isNewProjectModalOpen, setIsNewProjectModalOpen] = useState(false);
   const [isComponentListModalOpen, setIsComponentListModalOpen] = useState(false);
-  const handleCloseNewProjectModal = () => {
-    setIsNewProjectModalOpen(false);
-    router.refresh();
-  };
   const handleCloseComponentListModal = () => setIsComponentListModalOpen(false);
   const [projects, setProjects] = useState<ProjectListData[]>([]);
   const [isLoadingProjects, setIsLoadingProjects] = useState(true);
@@ -57,6 +53,32 @@ const SzakemberDashboard = ({ projects: initialProjectsData }: /* ... */ any) =>
   const [calculationResult, setCalculationResult] = useState<CalculationResultState>(null);
   const [isCalculating, setIsCalculating] = useState(false);
   
+    // --- A fetchProjects függvény definíciója ---
+  // Használjunk useCallback-et, hogy ne definiálódjon újra feleslegesen
+  const fetchProjects = useCallback(async () => {
+    console.log("FETCH PROJECTS triggered!"); // Logolás
+    setIsLoadingProjects(true);
+    setProjectError(null);
+    try {
+      const response = await fetch('/api/projects', { cache: 'no-store' });
+      if (!response.ok) { /* ... Hiba ... */ throw new Error('Projektlista lekérdezése sikertelen.'); }
+      const data: ProjectListData[] = await response.json();
+      setProjects(data);
+    } catch (err: any) { setProjectError(err.message); }
+    finally { setIsLoadingProjects(false); }
+  }, []); // Üres függőség, mert a fetch maga nem függ külső változótól
+  
+  // --- Első lekérdezés mountoláskor ---
+  useEffect(() => {
+    fetchProjects();
+  }, [fetchProjects]); // fetchProjects most már a dependency
+
+
+  const handleCloseNewProjectModal = () => {
+    setIsNewProjectModalOpen(false);
+    fetchProjects();
+  };
+
   const handleOpenAssignModal = (projectId: number) => {
     setSelectedProjectIdForAssign(projectId);
     setIsAssignModalOpen(true);
@@ -64,6 +86,7 @@ const SzakemberDashboard = ({ projects: initialProjectsData }: /* ... */ any) =>
   const handleCloseAssignModal = () => {
     setIsAssignModalOpen(false);
     setSelectedProjectIdForAssign(null); // Reseteljük az ID-t bezáráskor
+    fetchProjects();
   };
 
   const handleOpenViewComponentsModal = (projectId: number) => {
@@ -83,26 +106,9 @@ const SzakemberDashboard = ({ projects: initialProjectsData }: /* ... */ any) =>
   const handleCloseEstimateModal = () => {
       setIsEstimateModalOpen(false);
       setSelectedProjectIdForEstimate(null);
+      fetchProjects();
   };
 
-  // --- A fetchProjects függvény definíciója ---
-  // Használjunk useCallback-et, hogy ne definiálódjon újra feleslegesen
-  const fetchProjects = useCallback(async () => {
-    setIsLoadingProjects(true);
-    setProjectError(null);
-    try {
-      const response = await fetch('/api/projects');
-      if (!response.ok) { /* ... Hiba ... */ throw new Error('...'); }
-      const data: ProjectListData[] = await response.json();
-      setProjects(data);
-    } catch (err: any) { /* ... Hiba ... */ }
-    finally { setIsLoadingProjects(false); }
-  }, []); // Üres függőség, mert a fetch maga nem függ külső változótól
-
-  // --- Első lekérdezés mountoláskor ---
-  useEffect(() => {
-    fetchProjects();
-  }, [fetchProjects]); // fetchProjects most már a dependency
 
 
   // --- Kalkuláció indítása ÉS UTÁNA ÚJRAHÍVÁS ---
@@ -115,11 +121,13 @@ const SzakemberDashboard = ({ projects: initialProjectsData }: /* ... */ any) =>
       try {
           result = await calculateProjectCost(projectId);
           setCalculationResult(result);
+          console.log("calculateProjectCost lefutott, router.refresh() hívása...");
+          //router.refresh();
 
           // ---> ITT AZ ÚJ RÉSZ: Sikeres kalkuláció után frissítjük a listát <---
           if (result?.success) {
-              console.log("Kalkuláció sikeres, projektlista újratöltése...");
-              await fetchProjects(); // Meghívjuk újra a lekérdező függvényt
+              console.log("Kalkuláció sikeres, projektlista újratöltése (fetchProjects() hívása)...");
+              fetchProjects(); // Meghívjuk újra a lekérdező függvényt
           }
           // --------------------------------------------------------------------
 
@@ -131,44 +139,26 @@ const SzakemberDashboard = ({ projects: initialProjectsData }: /* ... */ any) =>
       }
   }, [fetchProjects]); // Most már függ a fetchProjects-től is!
 
-const handleCloseCalcModal = () => {
-    setIsCalcModalOpen(false);
-    setSelectedProjectIdForCalc(null);
-    setCalculationResult(null); // Eredmény törlése bezáráskor
-};
+  const handleCloseCalcModal = () => {
+      setIsCalcModalOpen(false);
+      setSelectedProjectIdForCalc(null);
+      setCalculationResult(null); // Eredmény törlése bezáráskor
+      fetchProjects();
+  };
 
 
 
 
-    // --- Adatlekérdezés useEffect-ben ---
-  useEffect(() => {
-    async function fetchProjects() {
-      setIsLoadingProjects(true);
-      setProjectError(null);
-      try {
-        const response = await fetch('/api/projects'); // Hívjuk az API végpontot
-        if (!response.ok) {
-          let errorMsg = `Hiba a projektek lekérdezésekor (${response.status})`;
-           try { const data = await response.json(); errorMsg = data.message || errorMsg; } catch(e){}
-          throw new Error(errorMsg);
-        }
-        const data: ProjectListData[] = await response.json();
-        setProjects(data);
-      } catch (err: any) {
-        console.error("Projekt lekérdezési hiba:", err);
-        setProjectError(err.message || 'Ismeretlen hiba történt.');
-      } finally {
-        setIsLoadingProjects(false);
-      }
-    }
-    fetchProjects(); // Lekérdezés indítása
-  }, []); // Üres függőségi lista: csak mountoláskor fut le
-  // --
+  //   // --- Adatlekérdezés useEffect-ben ---
+  // useEffect(() => {
+  //   fetchProjects(); // Lekérdezés indítása
+  // }, [fetchProjects]); // Üres függőségi lista: csak mountoláskor fut le
+  // // --
 
   return (
     // Használjuk a CSS modul class neveit
     <div className={styles.dashboardContainer}>
-      <h2>Szakember Műszerfal</h2>
+      <h2 className={styles.h2title}>Szakember Műszerfal</h2>
       <p className={styles.description}>Projektmenedzsment és adatrögzítés.</p>
 
       <div className={styles.gridContainer}>
@@ -201,14 +191,16 @@ const handleCloseCalcModal = () => {
 
       {/* Projekt Lista - Átadjuk az új handlert is */}
       <div className={styles.projectListSection} /*...*/ >
-        <h3>Aktuális Projektek</h3>
+        {isLoadingProjects ? <p>Projektek betöltése...</p> : projectError ? <p>{projectError}</p> :
         <ProjectList
             projects={projects}
             onOpenAssignModal={handleOpenAssignModal}
             onOpenEstimateModal={handleOpenEstimateModal} // Itt adjuk át
             onOpenViewComponentsModal={handleOpenViewComponentsModal}
             onOpenCalcModal={handleOpenCalcModal}
+            fetchProjects={fetchProjects} // <--- ÚJ PROP
         />
+        }
       </div>
 
       {/* Új Projekt Modal */}
@@ -246,7 +238,7 @@ const handleCloseCalcModal = () => {
            <Modal
              isOpen={isViewComponentsModalOpen}
              onClose={handleCloseViewComponentsModal}
-             title={`Hozzárendelt Alkatrészek (Projekt ID: ${selectedProjectIdForView})`}
+             title={`Projekt Napló (Projekt ID: ${selectedProjectIdForView})`}
            >
              <ProjectDetailsViewer projectId={selectedProjectIdForView} />
            </Modal>

@@ -33,6 +33,17 @@
     font-size: 1.3em; /* Kicsit nagyobb cím */
     color: #333;
   }
+
+  .h2title {
+    background-color: #578fca;
+    color: white;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 100%;
+    margin-left: -30px;
+  }
   
   /* Megjegyzés: Ha a Raktárosnak is lennének "kártyái" vagy gombjai a lista
      felett/mellett, akkor a .gridContainer, .card, .cardTitle stb. stílusokat

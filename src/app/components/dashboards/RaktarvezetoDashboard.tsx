@@ -31,7 +31,7 @@ const RaktarvezetoDashboard = () => {
 
   return (
     <div className={styles.dashboardContainer}>
-      <h2>Raktárvezetői Feladatok</h2>
+      <h2 className={styles.h2title}>Raktárvezetői Feladatok</h2>
       <p className={styles.description}>
         Kérjük, válasszon az alábbi menüpontok közül...
       </p>

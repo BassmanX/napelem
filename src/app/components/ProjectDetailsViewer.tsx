@@ -129,7 +129,7 @@ export function ProjectDetailsViewer({ projectId }: ProjectDetailsViewerProps) {
             ))}
           </ul>
         ) : (
-          <p className={styles.noData}>Nincsenek alkatrészek hozzárendelve ehhez a projekthez.</p>
+          <p className={styles.noData}>Nincsenek alkatrészek hozzárendelve ehhez a projekthez, vagy már törölve lettek.</p>
         )}
       </div>
 

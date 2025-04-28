@@ -43,7 +43,7 @@ const RaktarosDashboard = () => {
 
   return (
     <div className={styles.dashboardContainer}>
-      <h2>Raktáros Műszerfal</h2>
+      <h2 className={styles.h2title}>Raktáros Műszerfal</h2>
       <p className={styles.description}>
          {activePickingProjectId === null
              ? "Projektek előkészítése kivételezéshez."

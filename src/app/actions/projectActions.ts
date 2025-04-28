@@ -5,6 +5,7 @@ import { PrismaClient, Status, Prisma } from '@prisma/client';
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation'; // Vagy csak sikeres üzenetet küldünk vissza
+//import { revalidateTag } from 'next/cache';
 
 const prisma = new PrismaClient();
 
@@ -126,7 +127,7 @@ export async function createProject(prevState: NewProjectFormState, formData: Fo
     }
 
     // 3. Sikeres létrehozás és logolás utáni teendők
-    revalidatePath('/szakember/dashboard'); // Dashboard invalidálása
+    //revalidateTag('projects-list');
     // revalidatePath('/szakember/projektek'); // Ha van külön projekt lista oldal
 
     return { message: 'Projekt sikeresen létrehozva!', success: true };
@@ -255,8 +256,7 @@ export async function assignComponentsToProject(prevState: AssignComponentsFormS
      }
 
      // Sikeres művelet után cache invalidálás és visszatérés
-     revalidatePath(`/szakember/projektek/${projectId}`);
-     revalidatePath('/szakember/dashboard');
+     //revalidateTag('projects-list');
      return { message: 'Alkatrészek sikeresen hozzárendelve!', success: true };
 }
 
@@ -304,8 +304,7 @@ export async function addProjectEstimate(prevState: EstimateFormState, formData:
       }
 
      // 3. Sikeres művelet után
-     revalidatePath(`/szakember/projektek/${projectId}`); // Projekt részletek invalidálása
-     revalidatePath('/szakember/dashboard'); // Dashboard lista invalidálása
+     //revalidateTag('projects-list');
 
      return { message: 'Becslés sikeresen rögzítve!', success: true };
 }
@@ -451,7 +450,7 @@ export async function calculateProjectCost(projectId: number): Promise<Calculati
                          console.log(`[Calc Cost - Missing] Log létrehozva. Tranzakció vége.`); // <-- Log hozzáadva
                     });
                     console.log(`Projekt (ID: ${projectId}) státusza 'wait'-re váltott és logolva.`);
-                    revalidatePath('/szakember/dashboard');
+                    //revalidateTag('projects-list');
                 } catch (transactionError) {
                      console.error(`[Calc Cost - Missing] HIBA a 'wait' státusz tranzakcióban (Projekt ID: ${projectId}):`, transactionError);
                      // Hiba esetén is visszaadjuk a hiányzó komponensek infót, de jelezhetnénk a tranzakciós hibát is
@@ -501,7 +500,7 @@ export async function calculateProjectCost(projectId: number): Promise<Calculati
                 });
 
                 console.log(`Projekt (ID: ${projectId}) státusza 'scheduled'-re váltott és logolva.`);
-                revalidatePath('/szakember/dashboard');
+                //revalidateTag('projects-list');
 
                 // Sikeres visszatérés
                 return {
@@ -574,8 +573,7 @@ export async function closeProject(
     }
 
     // Sikeres művelet után cache invalidálása
-    revalidatePath('/szakember/dashboard'); // Dashboard lista invalidálása
-    revalidatePath(`/szakember/projektek/${projectId}`); // Projekt részletek invalidálása (ha van)
+    //revalidateTag('projects-list');
 
 
     return { message: `Projekt sikeresen lezárva (${finalStatus}) státusszal!`, success: true };
@@ -644,7 +642,7 @@ export async function startPickingProject(projectId: number): Promise<StartPicki
             console.log(`Projekt (ID: ${projectId}) státusza 'InProgress'-re állítva.`);
             revalidatePath('/szakember/dashboard'); // Szakember nézetet is frissítjük
             revalidatePath('/raktaros/dashboard'); // Raktáros nézetet is (ha külön van)
-             revalidatePath('/pages/dashboard'); // A fő dashboard oldalt is
+            revalidatePath('/pages/dashboard'); // A fő dashboard oldalt is
             return { message: 'Projekt kivételezésre átállítva!', success: true };
         }
          // Elvileg nem juthat ide

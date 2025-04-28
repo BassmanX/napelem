@@ -61,7 +61,7 @@ export async function GET(request: Request) {
                 name: comp.name,
                 totalStock: totalStock,
                 reservedStock: reservedStock,
-                availableStock: availableStock,
+                availableStock: Math.abs(availableStock),
             });
         }
         // ------------------------------------

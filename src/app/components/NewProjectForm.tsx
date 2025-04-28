@@ -5,6 +5,7 @@ import React, { useEffect, useRef, useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { createProject, type NewProjectFormState } from '@/app/actions/projectActions'; // Új action importálása
 import styles from '@/app/styles/ReceiveStockForm.module.css'; // Használj közös vagy saját CSS modult
+import { useRouter } from 'next/navigation';
 
 // Submit gomb
 function SubmitButton() {
@@ -24,18 +25,23 @@ export function NewProjectForm({ onFormSubmitSuccess }: NewProjectFormProps) {
   const initialState: NewProjectFormState = undefined;
   const [state, formAction] = useActionState(createProject, initialState);
   const formRef = useRef<HTMLFormElement>(null);
+  const router = useRouter();
 
   // Sikeres beküldés utáni teendők (form ürítés, modal bezárás)
   useEffect(() => {
      if (state?.success) {
        formRef.current?.reset();
+       // ---> router.refresh() HÍVÁSA ITT <---
+       console.log("NewProjectForm: Action sikeres, router.refresh() hívása...");
+       router.refresh();
+       // ----------------------------------
        if (onFormSubmitSuccess) {
          onFormSubmitSuccess();
          // Opcionális: Sikeres üzenet megjelenítése (pl. toast notification)
          alert('Projekt sikeresen létrehozva!'); // Egyszerű alert példaként
        }
      }
-   }, [state, onFormSubmitSuccess]);
+   }, [state, onFormSubmitSuccess, router]);
 
   return (
     <form ref={formRef} action={formAction} className={styles.form}>

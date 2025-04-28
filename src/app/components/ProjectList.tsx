@@ -6,7 +6,7 @@ import type { ProjectListData } from '@/app/api/projects/route'; // Típus impor
 import { Status } from '@prisma/client'; // Status enum importálása
 import styles from '@/app/styles/ProjectList.module.css'; // Hozz létre CSS modult
 import { closeProject } from '@/app/actions/projectActions'; 
-import { useRouter } from 'next/navigation';
+//import { useRouter } from 'next/navigation';
 
 interface ProjectListProps {
     projects: ProjectListData[];
@@ -15,6 +15,7 @@ interface ProjectListProps {
     onOpenEstimateModal: (projectId: number) => void; // Későbbi A.5 funkcióhoz
     onOpenViewComponentsModal: (projectId: number) => void;
     onOpenCalcModal: (projectId: number) => void;
+    fetchProjects: () => Promise<void>;
 }
 
 // Segédfüggvény a státuszok magyarításához/színezéséhez
@@ -31,8 +32,8 @@ function getStatusDisplay(status: Status): { text: string; color: string } {
     }
 }
 
-export function ProjectList({ projects, onOpenAssignModal, onOpenEstimateModal, onOpenViewComponentsModal, onOpenCalcModal }: ProjectListProps) {
-    const router = useRouter();
+export function ProjectList({ projects, onOpenAssignModal, onOpenEstimateModal, onOpenViewComponentsModal, onOpenCalcModal, fetchProjects }: ProjectListProps) {
+    //const router = useRouter();
 
     if (!projects || projects.length === 0) {
         return <p>Nincsenek megjeleníthető projektek.</p>;
@@ -48,7 +49,8 @@ export function ProjectList({ projects, onOpenAssignModal, onOpenEstimateModal, 
                 const result = await closeProject(projectId, finalStatus); // Server Action hívása
                 alert(result?.message || "Ismeretlen válasz a szervertől."); // Egyszerű visszajelzés
                 if (result?.success) {
-                    router.refresh(); // Lista frissítése sikeres zárás után
+                    console.log(`Projekt ${projectId} lezárva, fetchProjects() hívása...`);
+                    fetchProjects(); // <--- ITT HÍVJUK A FRISSÍTÉST
                 }
             } catch (error) {
                  console.error("Hiba a closeProject action hívása közben:", error);
@@ -60,6 +62,7 @@ export function ProjectList({ projects, onOpenAssignModal, onOpenEstimateModal, 
 
     return (
         <div className={styles.tableContainer}>
+           <h3 className={styles.h3title}>Projektek</h3>         
             <table className={styles.projectTable}>
                 <thead>
                     <tr>
@@ -118,7 +121,7 @@ export function ProjectList({ projects, onOpenAssignModal, onOpenEstimateModal, 
                                          className={`${styles.actionButton} ${styles.viewButton}`} // Adj neki stílust
                                          title="Hozzárendelt alkatrészek megtekintése"
                                      >
-                                         Megtekintés {/* Vagy egy szem ikon */}
+                                         Napló {/* Vagy egy szem ikon */}
                                      </button>
                                      <button
                                          onClick={() => onOpenEstimateModal(project.id)} // Ezt a propot hívja
@@ -143,7 +146,7 @@ export function ProjectList({ projects, onOpenAssignModal, onOpenEstimateModal, 
                                           title="Projekt sikeres befejezése"
                                           disabled={!canBeClosed} // Csak akkor aktív, ha zárható
                                      >
-                                          Befejezés ✓
+                                          ✓
                                      </button>
                                      <button
                                           onClick={() => handleCloseProject(project.id, Status.failed)}
@@ -151,7 +154,7 @@ export function ProjectList({ projects, onOpenAssignModal, onOpenEstimateModal, 
                                           title="Projekt sikertelen lezárása"
                                           disabled={!canBeClosed} // Csak akkor aktív, ha zárható
                                       >
-                                          Lezárás ✕
+                                          ✕
                                      </button>
                                 </td>
                             </tr>

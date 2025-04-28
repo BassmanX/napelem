@@ -38,6 +38,9 @@ export async function completePicking(
         return { success: false, message: "Hiányzó projekt ID vagy kivételezendő tételek." };
     }
 
+    // Komponens ID-k listája a későbbi adatb törléshez
+    const componentIdsInPick = itemsToPick.map(item => item.componentId);
+
     try {
         await prisma.$transaction(async (tx) => {
             console.log(`Tranzakció indítva a ${projectId} kivételezéséhez.`);
@@ -105,6 +108,19 @@ export async function completePicking(
                  console.log(`  Komponens ${componentId} kivételezése kész.`);
             } // for (item of itemsToPick) vége
 
+            // ---> 2. NULLA VAGY KEVESEBB MENNYISÉGŰ SOROK TÖRLÉSE <---
+            console.log(`Nulla/negatív mennyiségű InventoryItem rekordok törlése a pickelt komponensekhez...`);
+            const deletedItemsResult = await tx.inventoryItem.deleteMany({
+                where: {
+                    // Csak azokat töröljük, amik ebben a pickelésben érintettek voltak
+                    componentId: { in: componentIdsInPick },
+                    // ÉS a mennyiségük 0 vagy kevesebb lett
+                    quantity: { lte: 0 } // lte = Less Than or Equal to
+                }
+            });
+            console.log(`  ${deletedItemsResult.count} db 0 mennyiségű InventoryItem rekord törölve.`);
+            
+            // ---------------------------------------------------------
             // Ha minden alkatrész készletének csökkentése sikeres volt,
             // töröljük a foglalásokat (ProjectComponent rekordokat) ehhez a projekthez.
             console.log(`Foglalások törlése a ${projectId} projekthez...`);
